@@ -4,7 +4,18 @@ import { MdDelete } from "react-icons/md";
 import { IoIosAdd } from "react-icons/io";
 import { FaRegFile } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
-const Column = ({ col, columns, setColumns, index }) => {
+const Column = ({
+  col,
+  columns,
+  setColumns,
+  index,
+  setIsSidebarOpen,
+  setColAddIcon,
+  selected,
+  setSelected,
+  colIndex,
+  setColIndex,
+}) => {
   const [task, setTask] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [draggedTaskIndex, setDraggedTaskIndex] = useState(null);
@@ -12,6 +23,10 @@ const Column = ({ col, columns, setColumns, index }) => {
   const [editedTaskText, setEditedTaskText] = useState("");
 
   const [draggedColumnId, setDraggedColumnId] = useState(null);
+    const [isComponentCardViewing, setIsComponentViewing] = useState(null);
+      const titleViewRef = useRef(null);
+      const [titleValue, setTitleValue] = useState("");
+      const [editTaskIndex,setEditTaskIndex]=useState(null)
 
   const popupRef = useRef(null);
 
@@ -56,6 +71,9 @@ const Column = ({ col, columns, setColumns, index }) => {
 
   const handleTaskDrop = (e, targetColumnId, targetTaskIndex) => {
     e.preventDefault();
+    if(targetTaskIndex===0 || targetTaskIndex===columns[index].tasks.length-1){
+      return
+    }
 
     if (draggedTaskIndex === null || draggedColumnId === null) return;
 
@@ -105,7 +123,14 @@ const Column = ({ col, columns, setColumns, index }) => {
     setColumns(updatedColumns);
   };
   const handleAddIcon = () => {
-    setIsPopupOpen(true);
+    // setIsPopupOpen(true);
+    setColIndex(index);
+    setIsSidebarOpen(true);
+    setColAddIcon(true);
+    // console.log(selectedTitle)
+    // const newColumns = [...columns];
+    // newColumns[index].tasks.push(selectedTitle);
+    // setColumns(newColumns);
   };
 
   const handleDeleteTask = (taskIndex) => {
@@ -120,13 +145,16 @@ const Column = ({ col, columns, setColumns, index }) => {
   };
 
   const handleSaveTask = (taskIndex) => {
-    if (editedTaskText.trim() === "") {
-      return;
-    }
+    // if (editedTaskText.trim() === "") {
+    //   return;
+    // }
     const updatedColumns = [...columns];
-    updatedColumns[index].tasks[taskIndex] = editedTaskText;
     setColumns(updatedColumns);
     setEditingTaskIndex(null);
+    updatedColumns[index].tasks[taskIndex] = titleValue;
+    setIsComponentViewing(false)
+    setEditTaskIndex(null)
+    setTitleValue("")
   };
 
   useEffect(() => {
@@ -136,15 +164,27 @@ const Column = ({ col, columns, setColumns, index }) => {
         setTask("");
       }
     }
+    function handleClickOutsideTitleCard(event) {
+      if (
+        titleViewRef.current &&
+        !titleViewRef.current.contains(event.target)
+      ) {
+        setIsComponentViewing(false);
+      }
+    }
 
     if (isPopupOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
+    if (isComponentCardViewing) {
+      document.addEventListener("mousedown", handleClickOutsideTitleCard);
+    }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutsideTitleCard);
     };
-  }, [isPopupOpen, draggedTaskIndex]);
+  }, [isPopupOpen, isComponentCardViewing, titleValue,draggedTaskIndex]);
 
   return (
     <div
@@ -154,6 +194,18 @@ const Column = ({ col, columns, setColumns, index }) => {
       onDragOver={handleDragOver}
       onDrop={(e) => handleDrop(e, index)}
     >
+            {isComponentCardViewing && (
+        <div className="title-view-div" ref={titleViewRef}>
+          <label>Title</label>
+          <input
+            type="text"
+            value={titleValue}
+            onChange={(e) => setTitleValue(e.target.value)}
+            // onBlur={()=>handleSaveTask(editTaskIndex)}
+         />
+         <button className="save-edit-btn" onClick={()=>handleSaveTask(editTaskIndex)}>save</button>
+        </div>
+      )}
       <div className="col-content">
         <div className="title-div">
           <div className="title">
@@ -173,7 +225,7 @@ const Column = ({ col, columns, setColumns, index }) => {
               className={`task-content ${
                 draggedTaskIndex === i ? "dragging" : "tasks"
               }`}
-              draggable
+              draggable={["header", "footer"].includes(task.toLowerCase())?false:"true"}
               onDragStart={(e) => handleTaskDragStart(e, col.id, i)}
               onDragEnter={(e) => handleTaskDragEnter(e, col.id, i)}
               onDrop={(e) => handleTaskDrop(e, col.id, i)}
@@ -191,11 +243,22 @@ const Column = ({ col, columns, setColumns, index }) => {
                 />
               ) : (
                 <>
-                  {task}
-                  <div className="edit-del-div">
-                    <MdDelete onClick={() => handleDeleteTask(i)} />
-                    <MdEdit onClick={() => handleEditTask(i)} />
+                      <div
+                    onClick={(e) => {
+                      setIsComponentViewing(true);
+                      setTitleValue(e.target.innerText);
+                      setEditTaskIndex(i)
+                    }}
+                  >
+                    {task}
                   </div>
+                  {!["header", "footer"].includes(task.toLowerCase()) && (
+                    <div className="edit-del-div">
+                      <MdDelete onClick={() => handleDeleteTask(i)} />
+                      {/* <MdEdit onClick={() => handleEditTask(i)} /> */}
+                    </div>
+                  )}
+            
                 </>
               )}
             </div>

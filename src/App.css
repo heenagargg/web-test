@@ -28,19 +28,46 @@ body{
 
 
 .sidebar {
-  position: absolute;
+  z-index: 5;
+  position: fixed;
   right: 10px;
   top: 10px;
   background: #fff;
   box-shadow: 2px 3px 6px #0000001a;
   border: 1px solid rgb(234, 234, 234);
   border-radius: 8px;
-  padding: 16px 4px 0 16px;
-  width: 320px;
+  padding: 16px 4px 16px 16px;
   box-sizing: border-box;
   max-height: calc(100vh - 164px);
   overflow-y: auto;
+  /* animation: slideInSidebar 0.5s ease-in-out; */
+  /* scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.5) transparent; */
 }
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #bbb;
+  border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* 
+@keyframes slideInSidebar {
+  from {
+    right: -400px;
+    opacity: 0;
+  }
+  to {
+    right: 10px;
+    opacity: 1;
+  }
+} */
 
 .sidebar-title {
   font-size: 12px;
@@ -53,19 +80,24 @@ body{
 .section-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  padding-right: 8px;
 }
 
 
 .section-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  border: 1px solid #ccc;
+
+  border: 1px solid #EAEAEA;
+  width: 288px;
   border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  gap: 12px;
+  box-sizing: border-box;
   cursor: pointer;
-  transition: all 0.3s ease;
+
 }
 
 .section-item:hover {
@@ -79,8 +111,8 @@ body{
 
 
 .section-title {
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .section-description {
@@ -89,9 +121,19 @@ body{
 }
 
 
-.plus-icon {
-  color: gray;
-  font-size: 14px;
+.plus-icon-div {
+  /* color: gray;
+  font-size: 14px; */
+
+  align-self: center;
+    border-radius: 40px;
+    background: #f5f5f7;
+    height: 18px;
+    width: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 }
 
 
@@ -100,11 +142,55 @@ body{
 
 
 
+.title-view-div{
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  background: #000;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title-view-div label {
+  display: block;
+  margin: 10px 0 5px;
+  font-size: 14px;
+  text-align: left;
+}
+
+.title-view-div input {
+  width: 100%;
+  background: #222;
+  border: 1px solid #444;
+  padding: 8px;
+  color: white;
+  border-radius: 4px;
+}
+
+.save-edit-btn{
+  /* padding: 8px;
+  border-radius: 4px;
+  background-color: #3339f1;
+  color: white;
+  display: flex;
+  align-items: center; */
 
 
+  width: 100%;
+  background: #1621d8;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
 
 
-
+}
 
 
 

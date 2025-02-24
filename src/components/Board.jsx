@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Column from "./Column.jsx";
 
-const Board = ({ columns, setColumns }) => {
+const Board = ({ columns, setColumns,  setIsSidebarOpen,setColAddIcon  ,selected ,setSelected,     colIndex,setColIndex}) => {
   const [col, setCol] = useState({ title: "" });
 
   return (
@@ -16,6 +16,12 @@ const Board = ({ columns, setColumns }) => {
             setColumns={setColumns}
             index={index}
             columns={columns}
+              setIsSidebarOpen={setIsSidebarOpen}
+              setColAddIcon={setColAddIcon}
+selected={selected} 
+setSelected={setSelected}
+colIndex={colIndex}
+setColIndex={setColIndex}
           />
         </div>
         );
