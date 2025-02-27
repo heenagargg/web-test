@@ -1,0 +1,49 @@
+Page Layout suggestions 
+{
+    "page_type": "",
+    "page_title": "",
+    "page_description": "",
+    "page_outline": {
+        "sections": [
+            {
+                "section_type": "",
+                "section_title": "",
+                "section_description": "",
+            }
+        ]
+    }
+}
+
+
+System instruction:
+You are a helpful assistant that Suggest a website title, website description, and all pages with their respective sections for a website based on the given description and return your response in the required JSON format.
+
+Suggest a website title, website description, and all pages with their respective sections for a website based on the given user promt and return your response in the required JSON format.
+Instructions to follow:
+1. Suggest a website title and consise website description according to the website idea given.
+2. Do not include header and footer section in any page. 
+3. Must include Hero section in homepage with other suggested sections.
+4. Must include a Banner section with page title as section_title in all pages except homepage.
+5. page_type and section_type must be in slug format.
+
+Eebsite Idea: Discover the authentic flavors of India at our renowned restaurant, where culinary tradition meets modern innovation.
+
+Required JSON format: 
+{
+    "website_title": "",
+    "website_description": "",
+    "pages": [ 
+        "page_type": "page type in slug format",
+        "page_title": "",
+        "page_description": "",
+        "page_outline": {
+            "sections": [
+                {
+                    "section_type": "section type in slug format",
+                    "section_title": "",
+                    "section_description": "",
+                }
+            ]
+        }
+    ]
+}
