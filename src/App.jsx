@@ -1,292 +1,84 @@
 import React, { useEffect, useRef, useState } from "react";
-import Board from "./components/Board";
-import AddColumn from "./components/AddColumn";
-import Column from "./components/Column";
-import HomeColumn from "./components/HomeColumn";
-import { FaPlus } from "react-icons/fa"; // For the plus icon
+import OpenAI from 'openai';
+import { z } from "zod";
+import { zodResponseFormat } from "openai/helpers/zod";
+
+import { marked } from 'marked';
+
 
 const App = () => {
-  const [columns, setColumns] = useState([]);
-  const [homeAddIcon, setHomeAddIcon] = useState(null);
-  const [ColAddIcon, setColAddIcon] = useState(null);
-  const [colIndex, setColIndex] = useState(null);
-   const sidebarRef = useRef(null);
-  const [homeColumn, setHomeColumn] = useState([
-    {
-      id: 0,
-      title: "Home",
-      tasks: [
-        "Header",
-        "Hero",
-        "About Us",
-        "Testimonails",
-        "Contact",
-        "Footer",
-      ],
-    },
-  ]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(null);
-  const [selected, setSelected] = useState(null);
-  const [isComponentCardViewing,setIsComponentViewing]=useState(null)
-  const sections = [
-    { title: "Custom section", description: "Describe any section you want" },
-    { title: "About section", description: "Provide info about the company" },
-    {
-      title: "Benefit section",
-      description: "Explain the benefit of your offering",
-    },
-    { title: "Benefits section", description: "Showcase key benefits" },
-    { title: "Blog section", description: "Display blog posts" },
-    {
-      title: "Contact section",
-      description: "Encourage visitors to contact company",
-    },
-    {
-      title: "Call to Action section",
-      description: "Urge users to take action",
-    },
-    { title: "FAQ section", description: "Answer common questions" },
-    { title: "Feature section", description: "Highlight a feature in details" },
-    { title: "Features list section", description: "Highlight core features" },
-    { title: "Gallery section", description: "Showcase images or media" },
-    { title: "Hero section", description: "Highlight the main message" },
-    { title: "Logos section", description: "Display logos of key customers" },
-    { title: "Portfolio section", description: "Showcase portfolio items" },
-    {
-      title: "Pricing section",
-      description: "Display service or product prices",
-    },
-    { title: "Reviews section", description: "Showcase customer reviews" },
-    { title: "Services section", description: "Explain a service in details" },
-    { title: "Services list section", description: "Showcase your solutions" },
-    { title: "Team section", description: "Introduce the team" },
-    {
-      title: "Testimonials section",
-      description: "Showcase clients' success stories",
-    },
-    { title: "Title section", description: "Display a page title" },
-  ];
-
-  const handleAddSectionToHome = (sectionTitle) => {
-    if (homeAddIcon) {
-      let tempHomeColumn = JSON.parse(JSON.stringify(homeColumn));
-      // setHomeColumn((prevHome) => {
-      //   return prevHome.map((col) => ({
-      //     ...col,
-      //     tasks: [...col.tasks, sectionTitle],
-      //   }));
-      // });
-
-      let homeNew = tempHomeColumn[0].tasks;
-
-      homeNew.splice(homeNew.length - 1, 0, sectionTitle);
-      console.log(homeNew);
-
-      setHomeColumn((prevHome) => {
-        console.log(prevHome);
-        return prevHome.map((col) => ({
-          ...col,
-          tasks: homeNew,
-          // tasks: [...col.tasks, sectionTitle],
-        }));
-      });
-      setIsSidebarOpen(false);
-      setHomeAddIcon(false);
-      // setIsComponentViewing(true)
-
+    const [pages, setPages] = useState([]);
+    const [prompt, setPrompt] = useState("");
+    const openai = new OpenAI({ apiKey: import.meta.env.VITE_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
+    const returnSchema = z.object({
+        website_title: z.string(),
+        website_description: z.string(),
+        pages: z.array(
+            z.object({
+                page_type: z.string(), // Page type in slug format
+                page_title: z.string(),
+                page_description: z.string(),
+                sections: z.array(
+                    z.object({
+                        section_type: z.string(), // Section type in slug format
+                        section_title: z.string(),
+                        section_description: z.string()
+                    })
+                )
+            })
+        )
+    });
+    const handlePromptSubmit =  async (event) => {
+        event.preventDefault();
+        if( prompt ) {
+            const completion = await openai.beta.chat.completions.parse({
+            model: "gpt-4o-mini",
+            messages: [
+                { role: "system", content: `You are a helpful assistant that suggests a website title, website description, and all pages with their respective sections for a website based on the given user prompt and return your response in the required JSON format.
+                    Instructions to follow:
+                    1. Create up to 5 pages for each website. Exclude any blog pages.
+                    2. Propose a suitable website title and a concise website description based on the provided website idea.
+                    3. Design an informational website with a contact form included on the contact page only.
+                    4. Omit header and footer sections from all pages.
+                    5. Ensure the homepage features a Hero section along with other relevant sections.
+                    6. Include a Banner section on all pages except the homepage, with the page title as the section title.
+                    7. Use slug format for both page_type and section_type.
+                    ` 
+                },
+                { 
+                    role: "user", 
+                    content: prompt 
+                },
+            ],
+            response_format: zodResponseFormat(returnSchema, "websiteUI"),
+            });
+            const returnData = completion.choices[0].message.parsed;
+            console.log( returnData );
+        }else{
+            alert("Please describe your website in a few words.");
+        }
+        setPrompt("");
     }
-    if (ColAddIcon) {
-      let colNew = columns[colIndex].tasks;
-      colNew.splice(colNew.length - 1, 0, sectionTitle);
-      const newColumns = [...columns];
-      // newColumns[colIndex].tasks.push(sectionTitle);
-      newColumns[colIndex].tasks = colNew;
-      setColumns(newColumns);
-      setColAddIcon(false);
-      setIsSidebarOpen(false);
-    }
-  };
-
-
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        setIsSidebarOpen(false)
-      }
-    }
-
-    if (isSidebarOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isSidebarOpen]);
+  }, []);
 
 
   return (
-    <div className="main-container tree-container">
-      {isSidebarOpen && (
-        <div className="sidebar" ref={sidebarRef}>
-          <h2 className="sidebar-title">Add Sections</h2>
-          <div className="section-list">
-            {sections.map((section, index) => (
-              <div
-                key={index}
-                className={`section-item ${
-                  selected === index ? "selected" : ""
-                }`}
-                onClick={() => {
-                  handleAddSectionToHome(sections[index].title);
-                  setSelected(sections[index].title);
-                }}
-              >
-                <div className="section-text">
-                  <p className="section-title">{section.title}</p>
-                  <p className="section-description">{section.description}</p>
-                </div>
-                <div className="plus-icon-div">
-                  <FaPlus className="plus-icon" size={10} opacity={0.5} />
-                </div>
-              </div>
-            ))}
-          </div>
+    <div className="main-container">
+        <div className="form-container">
+          <h1 className="form-heading">What can I help you with?</h1>
+          <form action="" id="userPromptForm" onSubmit={handlePromptSubmit}>
+            <div className="form-control">
+                <textarea placeholder="Provide your website name and describe it in a few words." className="input-control" name="user_prompt" id="userPromptInput" onChange={(e) => setPrompt(e.target.value)} value={prompt}></textarea>
+            </div>
+            <div className="form-control">
+                <button className="submit-control btn-custom"  type="submit">Generate Your Website</button>
+            </div>
+          </form>
         </div>
-      )}
-   {/* {isComponentCardViewing && (
-       <div className="title-view-div">
-       <label>Title</label>
-       <input
-         type="text"
-         // value={title}
-         // onChange={(e) => setTitle(e.target.value)}
-       />
-       </div>
-   )} */}
-      <div style={{ alignSelf: "center" }} className="page root-page">
-        {
-          <HomeColumn
-            col={homeColumn}
-            columns={[homeColumn]}
-            setColumns={setHomeColumn}
-            index={0}
-            setIsSidebarOpen={setIsSidebarOpen}
-            setHomeAddIcon={setHomeAddIcon}
-            setIsComponentViewing={setIsComponentViewing}
-            isComponentCardViewing={isComponentCardViewing}
-
-          />
-        }
-      </div>
-      <AddColumn
-        columns={columns}
-        setColumns={setColumns}
-        className="page root-page"
-      />
-      <Board
-        columns={columns}
-        setColumns={setColumns}
-        setIsSidebarOpen={setIsSidebarOpen}
-        setColAddIcon={setColAddIcon}
-        selected={selected}
-        setSelected={setSelected}
-        colIndex={colIndex}
-        setColIndex={setColIndex}
-        setIsComponentViewing={setIsComponentViewing}
-      />
     </div>
   );
 };
 
 export default App;
-
-// import React, { useState, useEffect, useRef } from "react";
-// import Tree from "react-d3-tree";
-// import AddColumn from "./components/AddColumn";
-// import Column from "./components/Column";
-// import HomeColumn from "./components/HomeColumn";
-
-// const App = () => {
-//   const [columns, setColumns] = useState([]);
-//   const [homeColumn, setHomeColumn] = useState([
-//     {
-//       id: 0,
-//       title: "Home",
-//       tasks: ["Header"],
-//     },
-//   ]);
-//   const [treeData, setTreeData] = useState({});
-//   const nodeRefs = useRef({});
-
-//   useEffect(() => {
-//     setTreeData({
-//       name: "Home",
-//       attributes: {
-//         component: <HomeColumn col={homeColumn} setColumns={setHomeColumn} />,
-//       },
-//       children: [
-//         {
-//           name: "add page",
-//           attributes: {
-//             component: <AddColumn columns={columns} setColumns={setColumns} />,
-//           },
-//           children: columns?.map((col, index) => ({
-//             name: `column ${index + 1}`,
-//             attributes: {
-//               component: (
-//                 <Column
-//                   key={col.id}
-//                   col={col}
-//                   setColumns={setColumns}
-//                   index={index}
-//                   columns={columns}
-//                 />
-//               ),
-//             },
-//           })),
-//         },
-//       ],
-//     });
-//   }, [columns, homeColumn]);
-
-//   const renderForeignObjectNode = ({ nodeDatum }) => {
-//     return (
-//       <g ref={(el) => (nodeRefs.current[nodeDatum.name] = el)}>
-//         <foreignObject width="100%" height="100%" x="-150" y="-50">
-//           <div
-//             // style={{
-//             //   textAlign: "center",
-//             //   width: "auto",
-//             //   height: "auto",
-//             //   backgroundColor: "white",
-//             //   border: "1px solid black",
-//             //   borderRadius: "5px",
-//             //   padding: "10px",
-//             // }}
-//           >
-//             {nodeDatum.attributes?.component}
-//           </div>
-//         </foreignObject>
-//       </g>
-//     );
-//   };
-
-//   return (
-//     <div className="main-container" style={{ width: "100vw", height: "100vh" }}>
-//       <Tree
-//         data={treeData}
-//         orientation="vertical"
-//         renderCustomNodeElement={renderForeignObjectNode}
-//         translate={{ x: window.innerWidth / 2, y: 150 }}
-//         separation={{ siblings: 3, nonSiblings: 3 }}
-//         nodeSize={{ x: 350, y: 250 }} // Adjusted dynamically
-//         pathFunc="step"
-//         draggable={false}
-//       />
-//     </div>
-//   );
-// };
-
-// export default App;
