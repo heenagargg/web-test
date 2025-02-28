@@ -262,19 +262,23 @@ const SortableTask = ({ task, index, handleDeleteTask }) => {
 
   return ( 
     <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="task-content" >
-     <div onClick={console.log("rtyuio")}>
+
      {task}
-     </div>
+{/* 
       {!["header", "footer"].includes(task.toLowerCase()) && (
         <div className="edit-del-div">
           <MdDelete onClick={() => handleDeleteTask(index)} />
         </div>
-      )}
+      )} */}
     </div>
   );
 };
 
 const HomeColumn = ({ col, columns, setColumns, setIsSidebarOpen, setHomeAddIcon }) => {
+  const homeTasks= col[0].tasks.map((task)=>{
+    return task.section_title
+  })
+  console.log("homeTasks",homeTasks)
   const [task, setTask] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const popupRef = useRef(null);
@@ -283,6 +287,7 @@ const HomeColumn = ({ col, columns, setColumns, setIsSidebarOpen, setHomeAddIcon
     if (task.trim() === "") return;
     setColumns((prev) => {
       const updatedHome = [...prev];
+      console.log(updatedHome)
       updatedHome[0] = { ...prev[0], tasks: [...prev[0].tasks, task] };
       return updatedHome;
     });
@@ -332,9 +337,9 @@ const HomeColumn = ({ col, columns, setColumns, setIsSidebarOpen, setHomeAddIcon
         </div>
 
         <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-          <SortableContext items={col[0].tasks} strategy={verticalListSortingStrategy}>
+          <SortableContext items={homeTasks} strategy={verticalListSortingStrategy}>
             <div className="tasks-container">
-              {col[0].tasks.map((task, index) => (
+              {homeTasks.map((task, index) => (
                 <SortableTask key={task} task={task} index={index} handleDeleteTask={handleDeleteTask} />
               ))}
             </div>

@@ -1,0 +1,125 @@
+.container{
+    background-color: #f5f5f5;
+    min-height: 100vh;
+    min-width: 300px;
+    margin: auto;
+    padding: 24px;
+  }
+  
+  .homePage-container{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 48px;
+  }
+  .homePage{
+    width: 250px;
+    background-color: #fff;
+    width: 250px;
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    height: max-content;
+
+  }
+  .page-header{
+    background-color: #000;
+    color: #fff;
+    padding: 16px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .page-header-title{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .icon{
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+  }
+  .add-btn{
+    background-color: #3b82f6;
+    color: #fff;
+    border-radius: 30%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  /* .page-content{
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    width: 250px;
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    height: max-content;
+  } */
+  .section{
+    padding: 8px;
+    margin: 8px;
+    border:1px solid #e5e5e5;
+    border-radius: 4px;
+    /* border-bottom: 1px solid #e5e5e5; */
+    transition: backgroun-color 0.2s;
+  }
+  .section:first-child,.section:last-child{
+    background-color: #f5f5f7;
+  }
+  .add-page-container{
+    display: flex;
+    justify-content: center;
+    margin: 32px 0;
+  }
+  .add-page-btn{
+    background-color: #3b82f6;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .add-page-btn-icon{
+    margin-right: 8px;
+  }
+
+  .lower-pages-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+  .lower-page{
+    width: 250px;
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    height: max-content;
+  }
+
+  .lower-page-header{
+    background-color: #000;
+    color: #fff;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  .lower-page-title{
+    display: flex;
+    align-items: center;
+    gap:8px;
+  }

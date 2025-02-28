@@ -6,25 +6,130 @@ import HomeColumn from "./components/HomeColumn";
 import { FaPlus } from "react-icons/fa"; // For the plus icon
 
 const CardsBoard = () => {
+  
   const [columns, setColumns] = useState([]);
   const [homeAddIcon, setHomeAddIcon] = useState(null);
   const [ColAddIcon, setColAddIcon] = useState(null);
   const [colIndex, setColIndex] = useState(null);
    const sidebarRef = useRef(null);
+
+   const initialData = {
+    website_title: "John Doe's Portfolio",
+    website_description: "Showcasing 7+ years of expertise in web design, John Doe's Portfolio highlights innovative designs and successful projects, while providing insights into the crafting of user-friendly and engaging web experiences.",
+    pages: [
+      {
+        page_type: "home",
+        page_title: "Home",
+        page_description: "Welcome to my portfolio, where creativity meets functionality in web design.",
+        sections: [
+          {
+            section_type: "hero",
+            section_title: "Welcome to My Portfolio",
+            section_description: "Explore my journey as a web designer with over 7 years of experience."
+          },
+          {
+            section_type: "about_me",
+            section_title: "About Me",
+            section_description: "I'm a passionate web designer dedicated to producing stunning and effective websites."
+          },
+          {
+            section_type: "my_work",
+            section_title: "My Work",
+            section_description: "View my selected projects that demonstrate my skills and creativity in web design."
+          },
+          {
+            section_type: "testimonials",
+            section_title: "Testimonials",
+            section_description: "Hear from my clients about their experiences working with me."
+          }
+        ]
+      },
+      {
+        page_type: "about",
+        page_title: "About Me",
+        page_description: "Learn more about my background and design philosophy.",
+        sections: [
+          {
+            section_type: "banner",
+            section_title: "About Me",
+            section_description: ""
+          },
+          {
+            section_type: "background",
+            section_title: "My Background",
+            section_description: "I have 7+ years of experience in web design and development."
+          },
+          {
+            section_type: "design_philosophy",
+            section_title: "My Design Philosophy",
+            section_description: "I believe in creating user-centered designs that are both functional and visually appealing."
+          }
+        ]
+      },
+      {
+        page_type: "portfolio",
+        page_title: "Portfolio",
+        page_description: "A compilation of my projects, showcasing my design capabilities and style.",
+        sections: [
+          {
+            section_type: "banner",
+            section_title: "Portfolio",
+            section_description: ""
+          },
+          {
+            section_type: "featured_projects",
+            section_title: "Featured Projects",
+            section_description: "Explore a selection of my top projects that highlight my expertise."
+          },
+          {
+            section_type: "project_details",
+            section_title: "Project Details",
+            section_description: "Learn more about my process and the impact of each project."
+          }
+        ]
+      },
+      {
+        page_type: "contact",
+        page_title: "Contact Me",
+        page_description: "Get in touch for collaborations or inquiries.",
+        sections: [
+          {
+            section_type: "banner",
+            section_title: "Contact Me",
+            section_description: ""
+          },
+          {
+            section_type: "contact_form",
+            section_title: "Send Me a Message",
+            section_description: "Fill in the form below to reach out."
+          }
+        ]
+      }
+    ]
+  };
+
+  const tasks=[]
+  initialData.pages[0].sections.map((task)=>{
+    tasks.push(task)
+  })
+  console.log(tasks)
+
   const [homeColumn, setHomeColumn] = useState([
     {
       id: 0,
-      title: "Home",
-      tasks: [
-        "Header",
-        "Hero",
-        "About Us",
-        "Testimonails",
-        "Contact",
-        "Footer",
-      ],
+      title: initialData.pages[0].page_title,
+      tasks:tasks
+      // tasks: [
+      //   "Header",
+      //   "Hero",
+      //   "About Us",
+      //   "Testimonails",
+      //   "Contact",
+      //   "Footer",
+      // ],
     },
   ]);
+  console.log(homeColumn)
   const [isSidebarOpen, setIsSidebarOpen] = useState(null);
   const [selected, setSelected] = useState(null);
   const [isComponentCardViewing,setIsComponentViewing]=useState(null)
@@ -78,7 +183,6 @@ const CardsBoard = () => {
       // });
 
       let homeNew = tempHomeColumn[0].tasks;
-
       homeNew.splice(homeNew.length - 1, 0, sectionTitle);
       console.log(homeNew);
 
