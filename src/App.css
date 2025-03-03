@@ -16,7 +16,7 @@
 } */
 
 
-
+/* 
 
 .title-view-div{
   position: fixed;
@@ -46,15 +46,15 @@
   padding: 8px;
   color: white;
   border-radius: 4px;
-}
+} */
 
-.save-edit-btn{
-  /* padding: 8px;
+/* .save-edit-btn{
+  padding: 8px;
   border-radius: 4px;
   background-color: #3339f1;
   color: white;
   display: flex;
-  align-items: center; */
+  align-items: center;
 
 
   width: 100%;
@@ -66,10 +66,10 @@
   cursor: pointer;
 
 
-}
+} */
 
 
-
+/* 
 
 .board-div{
   display: flex;
@@ -197,56 +197,6 @@
   margin-top: 20px;
 }
 
-.popup-container {
-  position: fixed;
-  top:20px;
-  right: 20px;
-  width: 300px;
-  background: #111;
-  color: white;
-  padding: 20px;
-  border-radius: 8px;
-  animation: slideIn 0.3s ease-in-out;
-}
-
-.popup-content h3 {
-  font-size: 13px;
-  margin-bottom: 10px;
-  font-weight: 500;
-  letter-spacing: 1px;
-}
-
-.popup-content input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #444;
-  background: #222;
-  color: white;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  outline: none;
-}
-
-.proceed-button {
-  width: 100%;
-  background: #1621d8;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-@keyframes slideIn {
-  from {
-    right: -350px;
-    opacity: 0;
-  }
-  to {
-    right: 20px;
-    opacity: 1;
-  }
-}
 
 
 
@@ -366,4 +316,4 @@
 
 
 
-
+ */

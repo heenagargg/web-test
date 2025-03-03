@@ -5,7 +5,6 @@ import { zodResponseFormat } from "openai/helpers/zod";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { marked } from "marked";
 import CardsBoard from "./CardsBoard";
-import WebsiteBuild from "./components/WebsiteGenerator";
 import Website from "./components/Website";
 
 const App = () => {
