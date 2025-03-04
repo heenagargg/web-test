@@ -1,35 +1,45 @@
-@import url('https://fonts.googleapis.com/css2?family=Poiret+One&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-dark.min.css');
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 body {
-    min-height: 100vh;
-    background: #f5f5f7;
-    font-family: "Roboto", serif;
+	min-height: 100vh;
+	background: #f5f5f7;
+	font-family: "Roboto", serif;
 }
 
-input, textarea {
-    font-family: "Roboto Mono", serif;
-    font-weight: 400;
-    font-style: normal;
+input,
+textarea {
+	font-family: "Roboto Mono", serif;
+	font-weight: 400;
+	font-style: normal;
 }
 
-h1, h2, h3, h4, h5 {
-	font-family: "Poiret One", serif;
-	font-weight: 500;
+h1,
+h2,
+h3,
+h4,
+h5 {
+	font-family: "Quicksand", sans-serif;
+	font-weight: 400;
 	font-style: normal;
 	text-transform: capitalize;
+	color: #1c1c1c;
 }
 
 h1 {
-    font-size: 2.7rem;
-    margin-bottom: 25px;
+	font-size: 2.7rem;
+	margin-bottom: 15px;
 }
 
+.form-img {
+	margin-bottom: 25px;
+}
 
 .form-container {
 	max-width: 650px;
@@ -45,23 +55,29 @@ h1 {
 }
 
 .input-control {
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    resize: none;
-    box-shadow: 0 0 23px -10px #ccc;
-    display: block;
-    padding: 20px 25px;
-    font-size: 16px;
+	width: 100%;
+	border: 1px solid #ccc;
+	border-radius: 25px;
+	resize: none;
+	box-shadow: 0 0 23px -10px #ccc;
+	display: block;
+	padding: 20px 25px;
+	font-size: 16px;
+	opacity: 0.9;
+}
+
+.input-control:hover, .input-control:active, .input-control:focus {
+	opacity: 1;
 }
 
 textarea.input-control {
-    height: 150px;
+	height: 150px;
 }
 
 .btn-custom {
-	border-radius: 20px;
-	background: #D40027;
+	border-radius: 30px;
+	background: rgb(0, 75, 172);
+	background: linear-gradient(125deg, rgb(0, 75, 172) 0%, rgb(0, 130, 187) 35%, rgb(0, 183, 202) 100%);
 	color: #fff;
 	border: none;
 	padding: 15px 30px;
@@ -70,6 +86,7 @@ textarea.input-control {
 	cursor: pointer;
 	box-shadow: 2px 2px 5px #00000057;
 	transition: all ease 0.2s;
+	letter-spacing: 0.5px;
 }
 
 .btn-custom:hover {
@@ -77,5 +94,245 @@ textarea.input-control {
 }
 
 .form-container .submit-control {
-    margin-top: 30px;
+	margin-top: 25px;
+}
+
+.examples {
+	overflow: hidden;
+}
+
+.examples-container {
+	position: relative;
+	display: grid;
+	grid-template-rows: auto;
+	grid-template-columns: 1fr 1fr;
+	grid-auto-columns: 1fr;
+	align-self: flex-start;
+}
+
+.examples-container:after,
+.examples-container:before {
+	content: "";
+	position: absolute;
+	z-index: 1;
+	height: 100%;
+	top: 0;
+	pointer-events: none;
+}
+
+.examples-container:before {
+	left: -1px;
+	background: linear-gradient(90deg, #f5f5f7 4%, #fff0 99.76%);
+}
+
+.examples-container:after {
+	right: -1px;
+	background: linear-gradient(270deg, #f5f5f7 4%, #fff0 99.76%);
+}
+
+.examples-container .examples_items {
+	animation: marquee 40s linear infinite;
+}
+
+.examples-container .items {
+	display: flex;
+	gap: 12px;
+}
+
+.examples-container .emoji {
+	margin-right: 2px !important;
+}
+
+.examples-container .example {
+	white-space: nowrap;
+	gap: 4px;
+	border-radius: 20px;
+	background: rgba(0, 0, 0, 0.1);
+	color: #2a2a2a;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 20px;
+	cursor: pointer;
+	border: 1px solid #fff0;
+	transition: all 0.2s;
+	display: flex;
+	align-items: center;
+	letter-spacing: 1px;
+}
+
+.examples-container .example .arrow {
+	width: 18px;
+	height: 18px;
+	transition: opacity 0.2s;
+	opacity: .7;
+}
+
+.examples:hover .examples_items {
+	animation-play-state: paused;
+}
+
+.examples-container .example:hover {
+	border-color: #1c1c1c;
+}
+
+.footer-block {
+	padding: 15px 0;
+	/* background: #eee; */
+	position: absolute;
+	width: 100%;
+	bottom: 0;
+}
+
+.footer-block .container {
+	width: 100%;
+	/* max-width: 1320px; */
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: auto;
+	padding: 0 50px;
+}
+
+.footcol {
+	font-size: 14px;
+	letter-spacing: 0.5px;
+	display: flex;
+	align-items: center;
+	background: #dcdcde;
+	padding: 5px 20px;
+	border-radius: 25px;
+	margin-left: auto;
+}
+
+.product-by img {
+	height: 20px;
+	margin-right: 3px;
+}
+
+.footcol a {
+	font-family: "Quicksand", sans-serif;
+	display: inline-flex;
+	align-items: center;
+	margin-left: 5px;
+	font-weight: 700;
+	text-transform: uppercase;
+	color: #000;
+	text-decoration: none;
+}
+
+@media screen and (min-width:1261px) {
+	.examples {
+		width: 100%;
+		margin: 35px auto 0;
+	}
+
+	.examples .emoji {
+		width: 14px;
+		height: 14px;
+	}
+
+	.examples-container {
+		grid-column-gap: 12px;
+	}
+
+	.examples-container:after,
+	.examples-container:before {
+		width: 140px;
+	}
+
+	.examples-container .items {
+		grid-column-gap: 12px;
+	}
+
+	.examples-container .example {
+		padding: 5px 15px;
+	}
+}
+
+@media screen and (max-width:1260px) and (min-width:768px) {
+	.examples {
+		margin: 26px auto 0;
+	}
+
+	.examples .emoji {
+		width: 14px;
+		height: 14px;
+	}
+
+	.examples-container {
+		grid-column-gap: 12px;
+	}
+
+	.examples-container:after,
+	.examples-container:before {
+		width: 140px;
+	}
+
+	.examples-container .items {
+		grid-column-gap: 12px;
+	}
+
+	.examples-container .example {
+		padding: 5px 12px 5px 16px;
+	}
+}
+
+@media screen and (max-width:767px) {
+	.examples-container {
+		margin-top: 26px;
+		grid-column-gap: 6px;
+	}
+
+	.examples-container .emoji {
+		width: 12px !important;
+		height: 12px !important;
+	}
+
+	.examples-container:after,
+	.examples-container:before {
+		width: 60px;
+	}
+
+	.examples-container .items {
+		grid-column-gap: 6px;
+	}
+
+	.examples-container .example {
+		padding: 5px 12px 5px 16px;
+		font-size: 12px;
+		line-height: 18px;
+	}
+
+	.examples-container .example img {
+		width: 16px;
+		height: 16px;
+	}
+}
+
+
+@keyframes marquee {
+	0% {
+		transform: translateX(0%);
+	}
+
+	100% {
+		transform: translateX(-100%);
+	}
+}
+
+
+
+.array-div {
+	position: fixed;
+	right: 0;
+	width: 500px;
+	height: 100vh;
+	top: 0;
+	overflow: auto;
+	text-align: left;
+}
+
+.array-div pre {
+	text-wrap: auto;
+	padding: 15px;
 }
