@@ -1,11 +1,16 @@
-.main-container{
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* .main-container{
   padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: baseline;
   gap: 20px;
-}
+} */
 /* .sidebar-div{
   position: absolute;
   height: 200px;

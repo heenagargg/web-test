@@ -14,8 +14,6 @@
   .homePage{
     width: 250px;
     background-color: #fff;
-    width: 250px;
-    background-color: #fff;
     box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
     border-radius: 8px;
     height: max-content;
@@ -34,7 +32,10 @@
   .page-header-title{
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
+  }
+  .page-content{
+    padding: 4px 0px;
   }
   .icon{
     width: 16px;
@@ -90,9 +91,9 @@
   } */
   .section{
     padding: 10px;
-    margin: 8px;
+    margin: 4px 8px;
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 400;
     border:1px solid #e5e5e5;
     border-radius: 4px;
     cursor: pointer;
@@ -126,34 +127,99 @@
 
   .lower-pages-container{
     display: flex;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
+    position: relative;
     justify-content: center;
-    gap: 16px;
+  }
+  .lower-page-div{
+    width: 250px;
+    border-radius: 8px;
+    height: max-content;
+    position: relative;
+    padding: 0px 20px;
   }
   .lower-page{
-    width: 250px;
+    /* width: 250px;
     background-color: #fff;
     box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
     border-radius: 8px;
     height: max-content;
+    position: relative; */
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+    padding-bottom: 3px;
+    border-radius: 8px;
+    /* padding-top: 20px; */
   }
+
+
+  .lower-page::before,
+  .lower-page::after {
+    content: "";
+    position: absolute;
+    top: -49px;
+    width: 50%;
+    height: 1px;
+    background-color: #111;
+  }
+  
+  .lower-page::before {
+    left: 0;
+  }
+  
+  .lower-page::after {
+    right: 0;
+  }
+
+
+.first-page::before {
+  display: none;
+}
+
+
+.last-page::after {
+  display: none;
+}
+.one-page::after{
+  display: none;
+}
 
   .lower-page-header{
     background-color: #000;
     color: #fff;
-    padding: 6px;
+    padding: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
   }
+  .lower-page-header::before{
+    content: "";
+    position: absolute;
+    width: 1px;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 49px;
+    background: #111;
+  }
   .lower-page-title{
     display: flex;
     align-items: center;
-    gap:8px;
+    gap:4px;
   }
-
+.edit-input{
+  padding: 4px;
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  width: 100%;
+}
+.lower-page-content{
+  padding: 4px 0px;
+}
 
   .sidebar {
     position: absolute;
@@ -187,9 +253,13 @@
   }
 
   .sidebar-title {
-    font-size: 12px;
-      font-weight: 800;
-      margin-bottom: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  .sidebar-text{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
   .sidebar-list {
     display: flex;
@@ -273,6 +343,11 @@
     align-items: center;
     border-bottom: 1px solid #333;
   }
+  .side-drawer-title{
+    color: white;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+  }
   
   .side-drawer-content {
     padding: 16px;
@@ -315,50 +390,10 @@
     content: "";
     position: absolute;
     left: 50%;
-    width: 2px;
+    width: 1px;
     height: 80px;
-    background: gray;
-    transform: translateX(-50%);
+    background: #111;
   }
-
-  .lower-pages-container::before{
-    content: "";
-    position: absolute;
-    margin-top: -49px;
-    left: 50%;
-    /* width: 70%; */
-    height: 2px;
-    background: gray;
-    transform: translateX(-50%);
-  }
-.lower-pages-container.w-5::before{
-    width: 70%;
-}
-.lower-pages-container.w-4::before{
-    width: 52.7%;
-}
-.lower-pages-container.w-3::before{
-    width: 35%;
-}
-.lower-pages-container.w-2::before{
-    width: 17.6%;
-}
-.lower-pages-container.w-1::before{
-    width: 0%;
-}
-  .lower-page::before{
-    content: "";
-    position: absolute;
-    /* top: -68px; */
-    /* left: 50%; */
-    width: 2px;
-    margin-top: -49px;
-    margin-left: 125px;
-    height: 49px;
-    background: gray;
-    transform: translateX(-50%);
-  }
-
   .popup-container {
     position: fixed;
     top:20px;
@@ -375,6 +410,7 @@
     font-size: 13px;
     margin-bottom: 10px;
     font-weight: 500;
+    color: white;
     letter-spacing: 1px;
   }
   
@@ -410,3 +446,31 @@
     }
   }
   
+/* 
+.sortable-item{
+  display: flex;
+  align-items: center;
+} */
+ .sortable-item {
+  display: flex;
+  align-items: center;
+   position: relative;
+}
+  
+  .drag-handle {
+    position: absolute;
+   cursor: grab;
+  margin-right: 8px;
+  right: 8px;
+  }
+  
+   .section-content {
+     flex-grow: 1;
+    cursor: pointer;
+ }
+  .drag-handle-page{
+    position: absolute;
+    top: 10px;
+    cursor: grab;
+    z-index: 1;
+  }

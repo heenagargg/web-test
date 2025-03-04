@@ -2,10 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import OpenAI from 'openai';
 import { z } from "zod";
 import { zodResponseFormat } from "openai/helpers/zod";
-
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import hljs from 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/es/highlight.min.js';
 
 import { marked } from 'marked';
+import Website from "./components/Website";
 
 
 const App = () => {
@@ -66,6 +67,7 @@ const App = () => {
             let returnDiv = document.getElementById("aiReturnData");
             returnDiv.setHTMLUnsafe( '<code class="language-html">' + JSON.stringify(returnData, undefined, 2) + '</code>' );
             hljs.highlightBlock(returnDiv);
+            navigate("/web-test/website-building");
         }else{
             alert("Please describe your website in a few words.");
         }
@@ -77,56 +79,61 @@ const App = () => {
 
 
   return (
-    <div className="main-container">
-        <div className="form-container">
-            <img className="form-img" src="./bloxby.svg" alt="Bloxby" width={200} />
-            <h1 className="form-heading">What can I help you with?</h1>
-            <form action="" id="userPromptForm" onSubmit={handlePromptSubmit}>
-                <div className="form-control">
-                    <textarea placeholder="Provide your website name and describe it in a few words." className="input-control" name="user_prompt" id="userPromptInput" onChange={(e) => setPrompt(e.target.value)} value={prompt}></textarea>
-                </div>
-                <div className="form-control">
-                    <button className="submit-control btn-custom"  type="submit">Generate Your Website</button>
-                </div>
-            </form>
-            <div className="examples">
-                <div className="examples-container">
-                    <div className="examples_items">
-                        <div className="items">
-                            {
-                                examplesTexts.map((element, i) => {
-                                return(<div className="example" key={ 'example' + i }>
-                                    <span className="text" onClick={ () => { setPrompt(element) } }>{element}</span>
-                                </div>);
-                                })
-                            }                     
-                        </div>
-                    </div>
-                    <div className="examples_items">
-                        <div className="items">
-                            {
-                                examplesTexts.map((element, i) => {
-                                return(<div className="example" key={ 'example' + (examplesTexts.length + i) }>
-                                    <span className="text">{element}</span>
-                                </div>);
-                                })
-                            }                           
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="array-div">
-                <pre id="aiReturnData"></pre>
-            </div>
-        </div>
-        <div className="footer-block">
-            <div className="container">
-                {/* <div className="footcol copyright">@copyright { new Date().getFullYear() }. All rights reserved</div> */}
-                <div className="footcol product-by">A product by <a href="https://42works.net/" target="_blank"><img src="./42-logo.svg"/> Works</a></div>
-            </div>
-            
-        </div>
-    </div>
+   <Routes>
+    <Route path="/web-test/" element={
+       <div className="main-container">
+       <div className="form-container">
+           <img className="form-img" src="./bloxby.svg" alt="Bloxby" width={200} />
+           <h1 className="form-heading">What can I help you with?</h1>
+           <form action="" id="userPromptForm" onSubmit={handlePromptSubmit}>
+               <div className="form-control">
+                   <textarea placeholder="Provide your website name and describe it in a few words." className="input-control" name="user_prompt" id="userPromptInput" onChange={(e) => setPrompt(e.target.value)} value={prompt}></textarea>
+               </div>
+               <div className="form-control">
+                   <button className="submit-control btn-custom"  type="submit">Generate Your Website</button>
+               </div>
+           </form>
+           <div className="examples">
+               <div className="examples-container">
+                   <div className="examples_items">
+                       <div className="items">
+                           {
+                               examplesTexts.map((element, i) => {
+                               return(<div className="example" key={ 'example' + i }>
+                                   <span className="text" onClick={ () => { setPrompt(element) } }>{element}</span>
+                               </div>);
+                               })
+                           }                     
+                       </div>
+                   </div>
+                   <div className="examples_items">
+                       <div className="items">
+                           {
+                               examplesTexts.map((element, i) => {
+                               return(<div className="example" key={ 'example' + (examplesTexts.length + i) }>
+                                   <span className="text">{element}</span>
+                               </div>);
+                               })
+                           }                           
+                       </div>
+                   </div>
+               </div>
+           </div>
+           <div className="array-div">
+               <pre id="aiReturnData"></pre>
+           </div>
+       </div>
+       <div className="footer-block">
+           <div className="container">
+               {/* <div className="footcol copyright">@copyright { new Date().getFullYear() }. All rights reserved</div> */}
+               <div className="footcol product-by">A product by <a href="https://42works.net/" target="_blank"><img src="./42-logo.svg"/> Works</a></div>
+           </div>
+           
+       </div>
+   </div>
+    }/>
+     <Route path="/web-test/website-building" element={<Website/>}/>
+   </Routes>
   );
 };
 

@@ -6,6 +6,22 @@ import { FaRegFile } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
+
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  horizontalListSortingStrategy,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import SortableItem from "./SortableItem";
+import SortablePageItem from "./SortablePageItem";
 const Website = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(null);
   const [isHomeAddIconClicked, setIsHomeAddIconClicked] = useState(null);
@@ -22,6 +38,8 @@ const Website = () => {
   const titlePopupRef = useRef(null);
   const [editingPageIndex, setEditingPageIndex] = useState(null);
   const [tempTitle, setTempTitle] = useState("");
+  const sensors = useSensors(useSensor(PointerSensor));
+
   const [websiteData, setWebsiteData] = useState({
     website_title: "John Doe's Portfolio",
     website_description:
@@ -250,19 +268,16 @@ const Website = () => {
           if (index === colIndex) {
             const updatedSections = [...page.sections];
 
-            // Find the footer
             const footerIndex = updatedSections.findIndex(
               (section) => section.section_type === "footer"
             );
 
-            // Create the new section
             const newSectionObj = {
               section_type: "",
               section_title: newSection.title,
               section_description: "",
             };
 
-            // Insert above footer
             if (footerIndex !== -1) {
               updatedSections.splice(footerIndex, 0, newSectionObj);
             } else {
@@ -274,7 +289,7 @@ const Website = () => {
               sections: updatedSections,
             };
           }
-          return page; // No change for other pages
+          return page;
         });
 
         return {
@@ -347,7 +362,6 @@ const Website = () => {
   };
 
   const handleDeletePage = (pageIndex) => {
-    console.log("first", pageIndex);
     setWebsiteData((prevData) => ({
       ...prevData,
       pages: prevData.pages.filter((_, index) => index !== pageIndex),
@@ -376,17 +390,89 @@ const Website = () => {
     setEditingPageIndex(null);
   };
 
-  // useEffect(() => {
-  //   if (sidebarTitle) {
-  //     setIsTitlePopupOPen(true);
-  //   }
-  // }, [sidebarTitle]);
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    setWebsiteData((prevData) => {
+      const sections = [...prevData.pages[0].sections];
+
+      const oldIndex = sections.findIndex(
+        (section) => section.section_title === active.id
+      );
+      const newIndex = sections.findIndex(
+        (section) => section.section_title === over.id
+      );
+      if (
+        sections[newIndex].section_title === "Header" ||
+        sections[newIndex].section_title === "Footer"
+      ) {
+        return prevData;
+      }
+      const updatedSections = arrayMove(sections, oldIndex, newIndex);
+
+      const updatedPages = [...prevData.pages];
+      updatedPages[0].sections = updatedSections;
+
+      return {
+        ...prevData,
+        pages: updatedPages,
+      };
+    });
+  };
+
+  const handleLowerPageDragEnd = (event, pageIndex) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    setWebsiteData((prevData) => {
+      const updatedPages = [...prevData.pages];
+      const currentPage = updatedPages[pageIndex];
+      const sections = [...currentPage.sections];
+
+      const oldIndex = parseInt(active.id.split("-")[1], 10);
+      const newIndex = parseInt(over.id.split("-")[1], 10);
+
+      const overSectionTitle = sections[newIndex].section_title;
+      if (overSectionTitle === "Header" || overSectionTitle === "Footer") {
+        return prevData;
+      }
+
+      const [movedSection] = sections.splice(oldIndex, 1);
+      sections.splice(newIndex, 0, movedSection);
+
+      updatedPages[pageIndex] = { ...currentPage, sections };
+      return { ...prevData, pages: updatedPages };
+    });
+  };
+
+  const handlePageDragEnd = (event) => {
+    const { active, over } = event;
+    if (!over) return;
+    if (active.id !== over.id) {
+      setWebsiteData((prevData) => {
+        const updatedPages = [...prevData.pages];
+        const pagesToSort = updatedPages.slice(1);
+
+        const oldIndex = parseInt(active.id);
+        const newIndex = parseInt(over.id);
+
+        const sortedPages = arrayMove(pagesToSort, oldIndex, newIndex);
+
+        return {
+          ...prevData,
+          pages: [updatedPages[0], ...sortedPages],
+        };
+      });
+    }
+  };
 
   useEffect(() => {
     function handleClickOutside(event) {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
         setIsAddPagePopupOpen(false);
-        // setTitle("");
+
         setPopupTitle("");
       }
     }
@@ -404,7 +490,6 @@ const Website = () => {
     function handleClickOutside(event) {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
         setIsSidebarOpen(false);
-        // setTitle("");
       }
     }
 
@@ -423,29 +508,6 @@ const Website = () => {
         titlePopupRef.current &&
         !titlePopupRef.current.contains(event.target)
       ) {
-        // setWebsiteData((prevData) => {
-        //   const updatedPages = prevData.pages.map((page, index) => {
-        //     if (index === removeIndex) {
-        //       return {
-        //         ...page,
-        //         sections: page.sections.map((section) => {
-        //           if (section.section_title === sidebarTitle) {
-        //             return {
-        //               ...section,
-        //               section_title: editedSection,
-        //             };
-        //           }
-        //           return section;
-        //         }),
-        //       };
-        //     }
-        //     return page;
-        //   });
-        //   return {
-        //     ...prevData,
-        //     pages: updatedPages,
-        //   };
-        // });
         setWebsiteData((prevData) => {
           const updatedPages = prevData.pages.map((page, index) => {
             if (index === removeIndex) {
@@ -457,7 +519,7 @@ const Website = () => {
                       ...section,
                       section_title:
                         editedSection.trim() === ""
-                          ? section.section_title // Restore original title if edited is empty
+                          ? section.section_title
                           : editedSection,
                     };
                   }
@@ -472,7 +534,7 @@ const Website = () => {
             pages: updatedPages,
           };
         });
-        
+
         setEditedSection(null);
         setIsTitlePopupOPen(false);
       }
@@ -501,6 +563,7 @@ const Website = () => {
                   setSidebarTitle(sidebarSection.title);
                   handleAddSection(sidebarSection, index);
                   setEditedSection(sidebarSection.title);
+                  setIsTitlePopupOPen(true);
                 }}
               >
                 <div className="sidebar-text">
@@ -525,7 +588,7 @@ const Website = () => {
           ref={titlePopupRef}
         >
           <div className="side-drawer-header">
-            <h2>{sidebarTitle}</h2>
+            <h2 className="side-drawer-title">{sidebarTitle}</h2>
             <button
               className="close-btn"
               onClick={() => {
@@ -584,10 +647,9 @@ const Website = () => {
         <div className="homePage">
           <div className="page-header">
             <div className="page-header-title">
-              <span>
-                <FaHome />
-              </span>
-              <span>Home Page</span>
+              <FaHome />
+
+              <span style={{ fontSize: "13px" }}>Home Page</span>
             </div>
             <div
               className="home-add-btn"
@@ -602,28 +664,41 @@ const Website = () => {
             </div>
           </div>
           <div className="page-content">
-            {websiteData.pages[0].sections.map((section, sectionIndex) => {
-              return (
-                <div
-                  key={sectionIndex}
-                  className="section "
-                  onClick={(e) => {
-                    if (
-                      e.target.innerHTML === "Header" ||
-                      e.target.innerHTML === "Footer"
-                    ) {
-                      return;
-                    }
-                    setSidebarTitle(e.target.innerHTML);
-                    setIsTitlePopupOPen(true)
-                    setEditedSection(e.target.innerHTML);
-                    setRemoveIndex(0);
-                  }}
-                >
-                  {section.section_title}
-                </div>
-              );
-            })}
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={websiteData.pages[0].sections.map(
+                  (section) => section.section_title
+                )}
+                strategy={verticalListSortingStrategy}
+              >
+                {websiteData.pages[0].sections.map((section) => {
+                  const isDisabled =
+                    section.section_title === "Header" ||
+                    section.section_title === "Footer";
+
+                  return (
+                    <SortableItem
+                      key={section.section_title}
+                      id={section.section_title}
+                      disabled={isDisabled}
+                      onClick={(e) => {
+                        if (isDisabled) return;
+                        setSidebarTitle(e.target.innerHTML);
+                        setIsTitlePopupOPen(true);
+                        setEditedSection(e.target.innerHTML);
+                        setRemoveIndex(0);
+                      }}
+                    >
+                      <div className="section">{section.section_title}</div>
+                    </SortableItem>
+                  );
+                })}
+              </SortableContext>
+            </DndContext>
           </div>
         </div>
       </div>
@@ -646,98 +721,137 @@ const Website = () => {
         </button>
       </div>
 
-      <div
-        className={`lower-pages-container ${
-          websiteData.pages.length === 6 ? "w-5" : ""
-        } ${websiteData.pages.length === 5 ? "w-4" : ""} 
-        ${websiteData.pages.length === 4 ? "w-3" : ""}
-        ${websiteData.pages.length === 3 ? "w-2" : ""}
-        ${websiteData.pages.length === 2 ? "w-1" : ""}
-        `}
-      >
-        {websiteData.pages.slice(1).map((page, index) => {
-          const pageIndex = index + 1;
-          return (
-            <div key={pageIndex} className="lower-page">
-              <div className="lower-page-header">
-                <div className="lower-page-title">
-                  <span style={{ marginTop: "2px" }}>
-                    <FaRegFile />
-                  </span>
-                  {editingPageIndex === pageIndex ? (
-                    <input
-                      type="text"
-                      value={tempTitle}
-                      onChange={handleTitleChange}
-                      onBlur={() => handleTitleSave(pageIndex)}
-                      autoFocus
-                    />
-                  ) : (
-                    <span>{page.page_title}</span>
-                  )}
-                </div>
-                <div className="add-edit-div">
-                  <div
-                    className="add-btn"
-                    onClick={() => {
-                      setColIndex(pageIndex);
-                      setIsColAddIconClicked(true);
-                      setIsSidebarOpen(true);
-                    }}
-                  >
-                    <span style={{ marginBottom: "-4px" }}>
-                      <IoMdAdd />
-                    </span>
-                  </div>
-                  <div
-                    className="edit-btn"
-                    onClick={() => handleEditClick(pageIndex, page.page_title)}
-                  >
-                    <span style={{ marginBottom: "-4px" }}>
-                      <MdEdit />
-                    </span>
-                  </div>
-                  <div
-                    className="delete-btn"
-                    onClick={() => {
-                      // setColIndex(pageIndex)
-
-                      handleDeletePage(pageIndex);
-                    }}
-                  >
-                    <span style={{ marginBottom: "-4px" }}>
-                      <MdDelete />
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div>
-                {page.sections.map((section, sectionIndex) => {
-                  return (
+      <div className={`lower-pages-container`}>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handlePageDragEnd}
+        >
+          <SortableContext
+            items={websiteData.pages.slice(1).map((_, index) => index)}
+            strategy={horizontalListSortingStrategy}
+          >
+            {websiteData.pages.slice(1).map((page, index) => {
+              const pageIndex = index + 1;
+              const totalPages = websiteData.pages.length - 1;
+              return (
+                <SortablePageItem key={index} id={index}>
+                  <div className="lower-page-div">
                     <div
-                      className="section"
-                      key={sectionIndex}
-                      onClick={(e) => {
-                        if (
-                          e.target.innerHTML === "Header" ||
-                          e.target.innerHTML === "Footer"
-                        ) {
-                          return;
-                        }
-                        setSidebarTitle(e.target.innerHTML);
-                        setIsTitlePopupOPen(true)
-                        setEditedSection(e.target.innerHTML);
-                        setRemoveIndex(pageIndex);
-                      }}
+                      key={pageIndex}
+                      className={`lower-page ${
+                        index === 0
+                          ? "first-page"
+                          : index === totalPages - 1
+                          ? "last-page"
+                          : ""
+                      }  ${totalPages === 1 ? "one-page" : ""}`}
                     >
-                      {section.section_title}
+                      <div className="lower-page-header">
+                        <div className="lower-page-title">
+                          <span style={{ marginTop: "2px" }}>
+                            <FaRegFile />
+                          </span>
+                          {editingPageIndex === pageIndex ? (
+                            <input
+                              className="edit-input"
+                              type="text"
+                              value={tempTitle}
+                              onChange={handleTitleChange}
+                              onBlur={() => handleTitleSave(pageIndex)}
+                              autoFocus
+                            />
+                          ) : (
+                            <span style={{ fontSize: "13px" }}>
+                              {page.page_title}
+                            </span>
+                          )}
+                        </div>
+                        <div className="add-edit-div">
+                          <div
+                            className="add-btn"
+                            onClick={() => {
+                              setColIndex(pageIndex);
+                              setIsColAddIconClicked(true);
+                              setIsSidebarOpen(true);
+                            }}
+                          >
+                            <span style={{ marginBottom: "-4px" }}>
+                              <IoMdAdd />
+                            </span>
+                          </div>
+                          <div
+                            className="edit-btn"
+                            onClick={() =>
+                              handleEditClick(pageIndex, page.page_title)
+                            }
+                          >
+                            <span style={{ marginBottom: "-4px" }}>
+                              <MdEdit />
+                            </span>
+                          </div>
+                          <div
+                            className="delete-btn"
+                            onClick={() => {
+                              handleDeletePage(pageIndex);
+                            }}
+                          >
+                            <span style={{ marginBottom: "-4px" }}>
+                              <MdDelete />
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="lower-page-content">
+                        <DndContext
+                          sensors={sensors}
+                          collisionDetection={closestCenter}
+                          onDragEnd={(event) =>
+                            handleLowerPageDragEnd(event, pageIndex)
+                          }
+                        >
+                          <SortableContext
+                            items={websiteData.pages[pageIndex].sections.map(
+                              (_, idx) => `${pageIndex}-${idx}`
+                            )}
+                            strategy={verticalListSortingStrategy}
+                          >
+                            {page.sections.map((section, sectionIndex) => {
+                              return (
+                                <SortableItem
+                                  key={`${pageIndex}-${sectionIndex}`}
+                                  id={`${pageIndex}-${sectionIndex}`}
+                                  disabled={["Header", "Footer"].includes(
+                                    section.section_title
+                                  )}
+                                  onClick={() => {
+                                    if (
+                                      section.section_title === "Header" ||
+                                      section.section_title === "Footer"
+                                    )
+                                      return;
+                                    setSidebarTitle(section.section_title);
+                                    setIsTitlePopupOPen(true);
+                                    setEditedSection(section.section_title);
+                                    setRemoveIndex(pageIndex);
+                                  }}
+                                >
+                                  <div className="section">
+                                    {section.section_title}
+                                  </div>
+                                </SortableItem>
+                              );
+                            })}
+                          </SortableContext>
+                        </DndContext>
+                      </div>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
+                  </div>
+                </SortablePageItem>
+              );
+            })}
+          </SortableContext>
+        </DndContext>
       </div>
     </div>
   );
