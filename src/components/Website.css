@@ -1,7 +1,7 @@
-.container{
+.main-container{
     background-color: #f5f5f5;
     min-height: 100vh;
-    min-width: 300px;
+    width: max-content;
     margin: auto;
     padding: 24px;
   }
@@ -17,6 +17,7 @@
     box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
     border-radius: 8px;
     height: max-content;
+    position: relative;
 
   }
   .page-header{
@@ -97,9 +98,46 @@
     border:1px solid #e5e5e5;
     border-radius: 4px;
     cursor: pointer;
+    /* position: relative; */
     /* border-bottom: 1px solid #e5e5e5; */
     transition: backgroun-color 0.2s;
   }
+  
+
+  /* .section:hover {
+    border: 1px solid #4f46e5; 
+  }
+  
+
+  .section::after {
+    content: "+";
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    bottom: -10px;
+    background-color: #4f46e5;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    opacity: 0;
+    z-index: 1;
+    transition: opacity 0.3s ease;
+  }
+  
+
+  .section:hover::after {
+    opacity: 1;
+  }
+   */
+
+
+
 
   .section:first-child,.section:last-child{
     background-color: #f5f5f7;
@@ -389,7 +427,9 @@
   .homePage::after{
     content: "";
     position: absolute;
-    left: 50%;
+    left: 0;
+    right: 0;
+    margin: auto;
     width: 1px;
     height: 80px;
     background: #111;

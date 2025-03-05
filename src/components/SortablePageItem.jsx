@@ -3,7 +3,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { TbGripVertical } from "react-icons/tb";
 
 const SortablePageItem = ({ id, children }) => {
-    const { attributes, listeners, setNodeRef, transform, transition } =
+    const { attributes, listeners, setNodeRef, transform, transition ,} =
       useSortable({ id });
   
     const style = {
@@ -12,9 +12,6 @@ const SortablePageItem = ({ id, children }) => {
     };
   
     return (
-    //   <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-    //     {children}
-    //   </div>
     <div ref={setNodeRef} style={style}>
          
             <span {...listeners} {...attributes} className="drag-handle-page">

@@ -13,11 +13,14 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  TouchSensor,
+  KeyboardSensor,
 } from "@dnd-kit/core";
 import {
   SortableContext,
   arrayMove,
   horizontalListSortingStrategy,
+  sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import SortableItem from "./SortableItem";
@@ -38,7 +41,14 @@ const Website = () => {
   const titlePopupRef = useRef(null);
   const [editingPageIndex, setEditingPageIndex] = useState(null);
   const [tempTitle, setTempTitle] = useState("");
-  const sensors = useSensors(useSensor(PointerSensor));
+  const [isHoverOverSection,setIsHoverOverSection]=useState(null)
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(TouchSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const [websiteData, setWebsiteData] = useState({
     website_title: "John Doe's Portfolio",
@@ -550,7 +560,7 @@ const Website = () => {
   }, [isTitlePopupOpen, sidebarTitle, editedSection]);
 
   return (
-    <div className="container">
+    <div className="main-container">
       {isSidebarOpen && (
         <div className="sidebar" ref={sidebarRef}>
           <h2 className="sidebar-title">Add Sections</h2>
@@ -669,10 +679,19 @@ const Website = () => {
               collisionDetection={closestCenter}
               onDragEnd={handleDragEnd}
             >
+              {/* <SortableContext
+                items={websiteData.pages[0].sections
+                  .map((section) => section.section_title)}
+                strategy={verticalListSortingStrategy}
+              > */}
               <SortableContext
-                items={websiteData.pages[0].sections.map(
-                  (section) => section.section_title
-                )}
+                items={websiteData.pages[0].sections
+                  .filter(
+                    (section) =>
+                      section.section_title !== "Header" &&
+                      section.section_title !== "Footer"
+                  )
+                  .map((section) => section.section_title)}
                 strategy={verticalListSortingStrategy}
               >
                 {websiteData.pages[0].sections.map((section) => {
@@ -693,7 +712,7 @@ const Website = () => {
                         setRemoveIndex(0);
                       }}
                     >
-                      <div className="section">{section.section_title}</div>
+                      <div className={`section`}>{section.section_title}</div>
                     </SortableItem>
                   );
                 })}
@@ -810,10 +829,22 @@ const Website = () => {
                             handleLowerPageDragEnd(event, pageIndex)
                           }
                         >
-                          <SortableContext
+                          {/* <SortableContext
                             items={websiteData.pages[pageIndex].sections.map(
                               (_, idx) => `${pageIndex}-${idx}`
                             )}
+                            strategy={verticalListSortingStrategy}
+                          > */}
+                          <SortableContext
+                            items={websiteData.pages[pageIndex].sections
+                              .map((section, idx) =>
+                                ["Header", "Footer"].includes(
+                                  section.section_title
+                                )
+                                  ? null
+                                  : `${pageIndex}-${idx}`
+                              )
+                              .filter(Boolean)}
                             strategy={verticalListSortingStrategy}
                           >
                             {page.sections.map((section, sectionIndex) => {
