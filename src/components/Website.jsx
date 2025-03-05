@@ -29,6 +29,9 @@ const Website = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(null);
   const [isHomeAddIconClicked, setIsHomeAddIconClicked] = useState(null);
   const [isColAddIconClicked, setIsColAddIconClicked] = useState(null);
+  const [isSectionAddIconClicked, setIsSectionAddIconClicked] = useState(null);
+  const [indexOfAddSection, setIndexOfAddSection] = useState(null);
+  const [colIndexForAddSection, setColIndexForAddSection] = useState(null);
   const [colIndex, setColIndex] = useState(null);
   const [isTitlePopupOpen, setIsTitlePopupOPen] = useState(null);
   const [sidebarTitle, setSidebarTitle] = useState("");
@@ -41,7 +44,7 @@ const Website = () => {
   const titlePopupRef = useRef(null);
   const [editingPageIndex, setEditingPageIndex] = useState(null);
   const [tempTitle, setTempTitle] = useState("");
-  const [isHoverOverSection,setIsHoverOverSection]=useState(null)
+  const [isHoverOverSection, setIsHoverOverSection] = useState(null);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(TouchSensor),
@@ -308,11 +311,43 @@ const Website = () => {
         };
       });
     }
+    if (isSectionAddIconClicked) {
+      setWebsiteData((prevData) => {
+        const updatedPages = [...prevData.pages];
+
+        // Get the sections of the targeted page
+        const updatedSections = [
+          ...updatedPages[colIndexForAddSection].sections,
+        ];
+        const newSectionObj = {
+          section_type: "",
+          section_title: newSection.title,
+          section_description: "",
+        };
+
+        // Insert the new section after the given section index
+        updatedSections.splice(indexOfAddSection + 1, 0, newSectionObj);
+
+        // Update the page with the new sections
+        updatedPages[colIndexForAddSection] = {
+          ...updatedPages[colIndexForAddSection],
+          sections: updatedSections,
+        };
+
+        // Return the updated website data
+        return {
+          ...prevData,
+          pages: updatedPages,
+        };
+      });
+    }
 
     setIsSidebarOpen(false);
     setIsHomeAddIconClicked(false);
     setIsColAddIconClicked(false);
     setColIndex(null);
+    setColIndexForAddSection(null);
+    setIndexOfAddSection(null);
   };
 
   const handleAddPage = () => {
@@ -354,7 +389,7 @@ const Website = () => {
           return {
             ...page,
             sections: page.sections.filter(
-              (section) => section.section_title !== sidebarTitle
+              (_, idx) => idx !== indexOfAddSection
             ),
           };
         }
@@ -369,6 +404,7 @@ const Website = () => {
     setIsTitlePopupOPen(false);
     setRemoveIndex(null);
     setSidebarTitle(null);
+    setIndexOfAddSection(null);
   };
 
   const handleDeletePage = (pageIndex) => {
@@ -400,37 +436,99 @@ const Website = () => {
     setEditingPageIndex(null);
   };
 
+  // const handleDragEnd = (event) => {
+  //   const { active, over } = event;
+  //   if (!over || active.id === over.id) return;
+
+  //   setWebsiteData((prevData) => {
+  //     const sections = [...prevData.pages[0].sections];
+
+  //     const oldIndex = sections.findIndex(
+  //       (section) => section.section_title === active.id
+  //     );
+  //     const newIndex = sections.findIndex(
+  //       (section) => section.section_title === over.id
+  //     );
+  //     if (
+  //       sections[newIndex].section_title === "Header" ||
+  //       sections[newIndex].section_title === "Footer"
+  //     ) {
+  //       return prevData;
+  //     }
+  //     const updatedSections = arrayMove(sections, oldIndex, newIndex);
+
+  //     const updatedPages = [...prevData.pages];
+  //     updatedPages[0].sections = updatedSections;
+
+  //     return {
+  //       ...prevData,
+  //       pages: updatedPages,
+  //     };
+  //   });
+  // };
+
   const handleDragEnd = (event) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
-
+  
     setWebsiteData((prevData) => {
-      const sections = [...prevData.pages[0].sections];
-
-      const oldIndex = sections.findIndex(
-        (section) => section.section_title === active.id
-      );
-      const newIndex = sections.findIndex(
-        (section) => section.section_title === over.id
-      );
+      const updatedPages = [...prevData.pages];
+      const currentPage = updatedPages[0];
+      const sections = [...currentPage.sections];
+  
+      const oldIndex = active.id;
+      const newIndex = over.id;
+  
+      // Prevent dragging Header/Footer
+      const draggingSection = sections[oldIndex];
+      const targetSection = sections[newIndex];
       if (
-        sections[newIndex].section_title === "Header" ||
-        sections[newIndex].section_title === "Footer"
+        draggingSection.section_title === "Header" ||
+        draggingSection.section_title === "Footer" ||
+        targetSection.section_title === "Header" ||
+        targetSection.section_title === "Footer"
       ) {
         return prevData;
       }
-      const updatedSections = arrayMove(sections, oldIndex, newIndex);
-
-      const updatedPages = [...prevData.pages];
-      updatedPages[0].sections = updatedSections;
-
-      return {
-        ...prevData,
-        pages: updatedPages,
-      };
+  
+      const [movedSection] = sections.splice(oldIndex, 1);
+      sections.splice(newIndex, 0, movedSection);
+  
+      updatedPages[0] = { ...currentPage, sections };
+      return { ...prevData, pages: updatedPages };
     });
   };
+  
 
+
+
+
+
+  // const handleDragEnd = (event) => {
+  //   const { active, over } = event;
+  //   if (!over || active.id === over.id) return;
+  //   setWebsiteData((prevData) => {
+  //     const updatedPages = [...prevData.pages];
+  //     const currentPage = updatedPages[0];
+  //     const sections = [...currentPage.sections];
+
+  //     const oldIndex = sections.findIndex((_, idx) => idx === active.id);
+  //     const newIndex = sections.findIndex((_, idx) => idx === over.id);
+  //     // const oldIndex = parseInt(active.id.split("-")[1], 10);
+  //     // const newIndex = parseInt(over.id.split("-")[1], 10);
+
+  //     const overSectionTitle = sections[newIndex].section_title;
+  //     if (overSectionTitle === "Header" || overSectionTitle === "Footer") {
+  //       return prevData;
+  //     }
+
+  //     const [movedSection] = sections.splice(oldIndex, 1);
+  //     sections.splice(newIndex, 0, movedSection);
+
+  //     updatedPages[0] = { ...currentPage, sections };
+  //     return { ...prevData, pages: updatedPages };
+  //   });
+  // };
   const handleLowerPageDragEnd = (event, pageIndex) => {
     const { active, over } = event;
 
@@ -674,16 +772,11 @@ const Website = () => {
             </div>
           </div>
           <div className="page-content">
-            <DndContext
+            {/* <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
-              onDragEnd={handleDragEnd}
+              onDragEnd={(event) => handleDragEnd(event)}
             >
-              {/* <SortableContext
-                items={websiteData.pages[0].sections
-                  .map((section) => section.section_title)}
-                strategy={verticalListSortingStrategy}
-              > */}
               <SortableContext
                 items={websiteData.pages[0].sections
                   .filter(
@@ -694,30 +787,119 @@ const Website = () => {
                   .map((section) => section.section_title)}
                 strategy={verticalListSortingStrategy}
               >
-                {websiteData.pages[0].sections.map((section) => {
+                {websiteData.pages[0].sections.map((section, sectionIndex) => {
                   const isDisabled =
                     section.section_title === "Header" ||
                     section.section_title === "Footer";
 
                   return (
                     <SortableItem
-                      key={section.section_title}
-                      id={section.section_title}
+                      key={sectionIndex}
+                      id={sectionIndex}
                       disabled={isDisabled}
-                      onClick={(e) => {
-                        if (isDisabled) return;
-                        setSidebarTitle(e.target.innerHTML);
-                        setIsTitlePopupOPen(true);
-                        setEditedSection(e.target.innerHTML);
-                        setRemoveIndex(0);
-                      }}
                     >
-                      <div className={`section`}>{section.section_title}</div>
+                      <div className={`section`}>
+                        {section.section_title}
+                        {section.section_title !== "Header" &&
+                          section.section_title !== "Footer" && (
+                            <span
+                              className="pencil-icon"
+                              onClick={(e) => {
+                                if (isDisabled) return;
+                                setSidebarTitle(section.section_title);
+                                setIsTitlePopupOPen(true);
+                                setEditedSection(section.section_title);
+                                setRemoveIndex(0);
+                                setIndexOfAddSection(sectionIndex);
+                              }}
+                            >
+                              <MdEdit size={14} />
+                            </span>
+                          )}
+                        <span
+                          className="hover-plus-icon"
+                          onClick={(e) => {
+                            setIsSectionAddIconClicked(true);
+                            setIndexOfAddSection(sectionIndex);
+                            setColIndexForAddSection(0);
+
+                            setIsSidebarOpen(true);
+                          }}
+                        >
+                          <IoMdAdd />
+                        </span>
+                      </div>
                     </SortableItem>
                   );
                 })}
               </SortableContext>
-            </DndContext>
+            </DndContext> */}
+            <DndContext
+  sensors={sensors}
+  collisionDetection={closestCenter}
+  onDragEnd={handleDragEnd}
+>
+  <SortableContext
+         
+    items={websiteData.pages[0].sections.map((section, idx) =>
+      ["Header", "Footer"].includes(
+        section.section_title
+      )
+        ? null
+        :idx
+    )
+    .filter(Boolean)}
+    strategy={verticalListSortingStrategy}
+  >
+    {websiteData.pages[0].sections.map((section, sectionIndex) => {
+      const isDisabled =
+        section.section_title === "Header" ||
+        section.section_title === "Footer";
+
+      return (
+        <SortableItem
+          key={sectionIndex}
+          id={sectionIndex}
+          disabled={isDisabled}
+        >
+          <div className="section">
+            {section.section_title}
+            {!isDisabled && (
+              <>
+                <span
+                  className="pencil-icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSidebarTitle(section.section_title);
+                    setIsTitlePopupOPen(true);
+                    setEditedSection(section.section_title);
+                    setRemoveIndex(0);
+                    setIndexOfAddSection(sectionIndex);
+                  }}
+                >
+                  <MdEdit size={14} />
+                </span>
+                <span
+                  className="hover-plus-icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsSectionAddIconClicked(true);
+                    setIndexOfAddSection(sectionIndex);
+                    setColIndexForAddSection(0);
+                    setIsSidebarOpen(true);
+                  }}
+                >
+                  <IoMdAdd />
+                </span>
+              </>
+            )}
+          </div>
+        </SortableItem>
+      );
+    })}
+  </SortableContext>
+</DndContext>
+
           </div>
         </div>
       </div>
@@ -855,20 +1037,59 @@ const Website = () => {
                                   disabled={["Header", "Footer"].includes(
                                     section.section_title
                                   )}
-                                  onClick={() => {
-                                    if (
-                                      section.section_title === "Header" ||
-                                      section.section_title === "Footer"
-                                    )
-                                      return;
-                                    setSidebarTitle(section.section_title);
-                                    setIsTitlePopupOPen(true);
-                                    setEditedSection(section.section_title);
-                                    setRemoveIndex(pageIndex);
-                                  }}
+                                  // onClick={() => {
+                                  //   if (
+                                  //     section.section_title === "Header" ||
+                                  //     section.section_title === "Footer"
+                                  //   )
+                                  //     return;
+                                  //   setSidebarTitle(section.section_title);
+                                  //   setIsTitlePopupOPen(true);
+                                  //   setEditedSection(section.section_title);
+                                  //   setRemoveIndex(pageIndex);
+                                  // }}
                                 >
                                   <div className="section">
                                     {section.section_title}
+
+                                    {section.section_title !== "Header" &&
+                                      section.section_title !== "Footer" && (
+                                        <span
+                                          className="pencil-icon"
+                                          onClick={(e) => {
+                                            if (
+                                              section.section_title ===
+                                                "Header" ||
+                                              section.section_title === "Footer"
+                                            )
+                                              return;
+                                            setSidebarTitle(
+                                              section.section_title
+                                            );
+                                            setIsTitlePopupOPen(true);
+                                            setEditedSection(
+                                              section.section_title
+                                            );
+                                            setRemoveIndex(pageIndex);
+                                            setIndexOfAddSection(sectionIndex);
+                                          }}
+                                        >
+                                          <MdEdit size={14} />
+                                        </span>
+                                      )}
+
+                                    <span
+                                      className="hover-plus-icon"
+                                      onClick={(e) => {
+                                        setIsSectionAddIconClicked(true);
+                                        setIndexOfAddSection(sectionIndex);
+                                        setColIndexForAddSection(pageIndex);
+
+                                        setIsSidebarOpen(true);
+                                      }}
+                                    >
+                                      <IoMdAdd />
+                                    </span>
                                   </div>
                                 </SortableItem>
                               );
