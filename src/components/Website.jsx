@@ -23,6 +23,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import {restrictToHorizontalAxis,restrictToParentElement,restrictToWindowEdges} from '@dnd-kit/modifiers'
 import SortableItem from "./SortableItem";
 import SortablePageItem from "./SortablePageItem";
 const Website = () => {
@@ -351,6 +352,9 @@ const Website = () => {
   };
 
   const handleAddPage = () => {
+    // if(popupTitle.trim()===""){
+    //   return
+    // }
     const formattedType = popupTitle.toLowerCase().replace(" ", "_");
     const newPage = {
       page_type: formattedType,
@@ -470,15 +474,15 @@ const Website = () => {
   const handleDragEnd = (event) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
-  
+
     setWebsiteData((prevData) => {
       const updatedPages = [...prevData.pages];
       const currentPage = updatedPages[0];
       const sections = [...currentPage.sections];
-  
+
       const oldIndex = active.id;
       const newIndex = over.id;
-  
+
       // Prevent dragging Header/Footer
       const draggingSection = sections[oldIndex];
       const targetSection = sections[newIndex];
@@ -490,19 +494,14 @@ const Website = () => {
       ) {
         return prevData;
       }
-  
+
       const [movedSection] = sections.splice(oldIndex, 1);
       sections.splice(newIndex, 0, movedSection);
-  
+
       updatedPages[0] = { ...currentPage, sections };
       return { ...prevData, pages: updatedPages };
     });
   };
-  
-
-
-
-
 
   // const handleDragEnd = (event) => {
   //   const { active, over } = event;
@@ -745,7 +744,13 @@ const Website = () => {
               value={popupTitle}
               onChange={(e) => setPopupTitle(e.target.value)}
             />
-            <button className="proceed-button" onClick={() => handleAddPage()}>
+            <button
+              className={`proceed-button ${
+                popupTitle.trim() === "" ? "btn-disable" : "btn-enable"
+              }`}
+              disabled={popupTitle.trim() === "" ? true : false}
+              onClick={() => handleAddPage()}
+            >
               Proceed
             </button>
           </div>
@@ -835,71 +840,70 @@ const Website = () => {
               </SortableContext>
             </DndContext> */}
             <DndContext
-  sensors={sensors}
-  collisionDetection={closestCenter}
-  onDragEnd={handleDragEnd}
->
-  <SortableContext
-         
-    items={websiteData.pages[0].sections.map((section, idx) =>
-      ["Header", "Footer"].includes(
-        section.section_title
-      )
-        ? null
-        :idx
-    )
-    .filter(Boolean)}
-    strategy={verticalListSortingStrategy}
-  >
-    {websiteData.pages[0].sections.map((section, sectionIndex) => {
-      const isDisabled =
-        section.section_title === "Header" ||
-        section.section_title === "Footer";
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+              modifiers={[restrictToWindowEdges]}
+            >
+              <SortableContext
+                items={websiteData.pages[0].sections
+                  .map((section, idx) =>
+                    ["Header", "Footer"].includes(section.section_title)
+                      ? null
+                      : idx
+                  )
+                  .filter(Boolean)}
+                strategy={verticalListSortingStrategy}
+              >
+                {websiteData.pages[0].sections.map((section, sectionIndex) => {
+                  const isDisabled =
+                    section.section_title === "Header" ||
+                    section.section_title === "Footer";
 
-      return (
-        <SortableItem
-          key={sectionIndex}
-          id={sectionIndex}
-          disabled={isDisabled}
-        >
-          <div className="section">
-            {section.section_title}
-            {!isDisabled && (
-              <>
-                <span
-                  className="pencil-icon"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSidebarTitle(section.section_title);
-                    setIsTitlePopupOPen(true);
-                    setEditedSection(section.section_title);
-                    setRemoveIndex(0);
-                    setIndexOfAddSection(sectionIndex);
-                  }}
-                >
-                  <MdEdit size={14} />
-                </span>
-                <span
-                  className="hover-plus-icon"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsSectionAddIconClicked(true);
-                    setIndexOfAddSection(sectionIndex);
-                    setColIndexForAddSection(0);
-                    setIsSidebarOpen(true);
-                  }}
-                >
-                  <IoMdAdd />
-                </span>
-              </>
-            )}
-          </div>
-        </SortableItem>
-      );
-    })}
-  </SortableContext>
-</DndContext>
-
+                  return (
+                    <SortableItem
+                      key={sectionIndex}
+                      id={sectionIndex}
+                      disabled={isDisabled}
+                    >
+                      <div className="section">
+                        {section.section_title}
+                        {!isDisabled && (
+                          <>
+                            <span
+                              className="pencil-icon"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSidebarTitle(section.section_title);
+                                setIsTitlePopupOPen(true);
+                                setEditedSection(section.section_title);
+                                setRemoveIndex(0);
+                                setIndexOfAddSection(sectionIndex);
+                              }}
+                            >
+                              <MdEdit size={14} />
+                            </span>
+                         
+                          </>
+                        )}
+                        { section.section_title!=="Footer" &&  <span
+                              className="hover-plus-icon"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setIsSectionAddIconClicked(true);
+                                setIndexOfAddSection(sectionIndex);
+                                setColIndexForAddSection(0);
+                                setIsSidebarOpen(true);
+                              }}
+                            >
+                              <IoMdAdd />
+                            </span>}
+                      </div>
+                    </SortableItem>
+                  );
+                })}
+              </SortableContext>
+            </DndContext>
           </div>
         </div>
       </div>
@@ -927,6 +931,7 @@ const Website = () => {
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handlePageDragEnd}
+          modifiers={[restrictToHorizontalAxis,restrictToWindowEdges]}
         >
           <SortableContext
             items={websiteData.pages.slice(1).map((_, index) => index)}
@@ -1007,6 +1012,7 @@ const Website = () => {
                         <DndContext
                           sensors={sensors}
                           collisionDetection={closestCenter}
+                          modifiers={[restrictToWindowEdges]}
                           onDragEnd={(event) =>
                             handleLowerPageDragEnd(event, pageIndex)
                           }
@@ -1078,7 +1084,7 @@ const Website = () => {
                                         </span>
                                       )}
 
-                                    <span
+                             { section.section_title!=="Footer" &&      <span
                                       className="hover-plus-icon"
                                       onClick={(e) => {
                                         setIsSectionAddIconClicked(true);
@@ -1089,7 +1095,7 @@ const Website = () => {
                                       }}
                                     >
                                       <IoMdAdd />
-                                    </span>
+                                    </span>}
                                   </div>
                                 </SortableItem>
                               );

@@ -67,7 +67,7 @@ const App = () => {
             let returnDiv = document.getElementById("aiReturnData");
             returnDiv.setHTMLUnsafe( '<code class="language-html">' + JSON.stringify(returnData, undefined, 2) + '</code>' );
             hljs.highlightBlock(returnDiv);
-            navigate("/web-test/website-building");
+            // navigate("/web-test/website-building");
         }else{
             alert("Please describe your website in a few words.");
         }
