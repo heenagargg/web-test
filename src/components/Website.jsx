@@ -760,6 +760,11 @@ const Website = () => {
                   setEditedSection(sidebarSection.title);
                   setEditedDescription(sidebarSection.description);
                   setIsTitlePopupOPen(true);
+                  if(isHomeAddIconClicked){
+                    setRemoveIndex(0)
+                  }else{
+                    setRemoveIndex(colIndex)
+                  }
                 }}
               >
                 <div className="sidebar-text">
