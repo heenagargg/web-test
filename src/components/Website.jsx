@@ -23,10 +23,18 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import {restrictToHorizontalAxis,restrictToParentElement,restrictToWindowEdges} from '@dnd-kit/modifiers'
+import {
+  restrictToHorizontalAxis,
+  restrictToParentElement,
+  restrictToWindowEdges,
+} from "@dnd-kit/modifiers";
 import SortableItem from "./SortableItem";
 import SortablePageItem from "./SortablePageItem";
+import { useLocation } from "react-router";
 const Website = () => {
+  // const location = useLocation();
+  // const jsonData = location.state ?? {};
+  // console.log("jsonData",jsonData)
   const [isSidebarOpen, setIsSidebarOpen] = useState(null);
   const [isHomeAddIconClicked, setIsHomeAddIconClicked] = useState(null);
   const [isColAddIconClicked, setIsColAddIconClicked] = useState(null);
@@ -36,10 +44,12 @@ const Website = () => {
   const [colIndex, setColIndex] = useState(null);
   const [isTitlePopupOpen, setIsTitlePopupOPen] = useState(null);
   const [sidebarTitle, setSidebarTitle] = useState("");
+  const [sidebarDescription, setSidebarDescription] = useState("");
   const [isAddPagePopupOpen, setIsAddPagePopupOpen] = useState(null);
   const [popupTitle, setPopupTitle] = useState("");
   const [removeIndex, setRemoveIndex] = useState(null);
   const [editedSection, setEditedSection] = useState("");
+  const [editedDescription, setEditedDescription] = useState("");
   const popupRef = useRef(null);
   const sidebarRef = useRef(null);
   const titlePopupRef = useRef(null);
@@ -203,42 +213,111 @@ const Website = () => {
     ],
   });
   const SidebarSections = [
-    { title: "Custom section", description: "Describe any section you want" },
-    { title: "About section", description: "Provide info about the company" },
     {
+      type: "custom_section",
+      title: "Custom section",
+      description: "Describe any section you want",
+    },
+    {
+      type: "about_section",
+      title: "About section",
+      description: "Provide info about the company",
+    },
+    {
+      type: "benefit_section",
       title: "Benefit section",
       description: "Explain the benefit of your offering",
     },
-    { title: "Benefits section", description: "Showcase key benefits" },
-    { title: "Blog section", description: "Display blog posts" },
     {
+      type: "benefits_section",
+      title: "Benefits section",
+      description: "Showcase key benefits",
+    },
+    {
+      type: "blog_section",
+      title: "Blog section",
+      description: "Display blog posts",
+    },
+    {
+      type: "contact_section",
       title: "Contact section",
       description: "Encourage visitors to contact company",
     },
     {
+      type: "call_to_action_section",
       title: "Call to Action section",
       description: "Urge users to take action",
     },
-    { title: "FAQ section", description: "Answer common questions" },
-    { title: "Feature section", description: "Highlight a feature in details" },
-    { title: "Features list section", description: "Highlight core features" },
-    { title: "Gallery section", description: "Showcase images or media" },
-    { title: "Hero section", description: "Highlight the main message" },
-    { title: "Logos section", description: "Display logos of key customers" },
-    { title: "Portfolio section", description: "Showcase portfolio items" },
     {
+      type: "faq_section",
+      title: "FAQ section",
+      description: "Answer common questions",
+    },
+    {
+      type: "feature_section",
+      title: "Feature section",
+      description: "Highlight a feature in details",
+    },
+    {
+      type: "features_list_section",
+      title: "Features list section",
+      description: "Highlight core features",
+    },
+    {
+      type: "gallery_section",
+      title: "Gallery section",
+      description: "Showcase images or media",
+    },
+    {
+      type: "hero_section",
+      title: "Hero section",
+      description: "Highlight the main message",
+    },
+    {
+      type: "logos_section",
+      title: "Logos section",
+      description: "Display logos of key customers",
+    },
+    {
+      type: "portfolio_section",
+      title: "Portfolio section",
+      description: "Showcase portfolio items",
+    },
+    {
+      type: "pricing_section",
       title: "Pricing section",
       description: "Display service or product prices",
     },
-    { title: "Reviews section", description: "Showcase customer reviews" },
-    { title: "Services section", description: "Explain a service in details" },
-    { title: "Services list section", description: "Showcase your solutions" },
-    { title: "Team section", description: "Introduce the team" },
     {
+      type: "reviews_section",
+      title: "Reviews section",
+      description: "Showcase customer reviews",
+    },
+    {
+      type: "services_section",
+      title: "Services section",
+      description: "Explain a service in details",
+    },
+    {
+      type: "services_list_section",
+      title: "Services list section",
+      description: "Showcase your solutions",
+    },
+    {
+      type: "team_section",
+      title: "Team section",
+      description: "Introduce the team",
+    },
+    {
+      type: "testimonials_section",
       title: "Testimonials section",
       description: "Showcase clients' success stories",
     },
-    { title: "Title section", description: "Display a page title" },
+    {
+      type: "title_section",
+      title: "Title section",
+      description: "Display a page title",
+    },
   ];
 
   const handleAddSection = (newSection, index) => {
@@ -255,9 +334,9 @@ const Website = () => {
               );
 
               const newSectionObj = {
-                section_type: "",
+                section_type: newSection.type,
                 section_title: newSection.title,
-                section_description: "",
+                section_description: newSection.description,
               };
 
               if (footerIndex !== -1) {
@@ -287,15 +366,15 @@ const Website = () => {
             );
 
             const newSectionObj = {
-              section_type: "",
+              section_type: newSection.type,
               section_title: newSection.title,
-              section_description: "",
+              section_description: newSection.description,
             };
 
             if (footerIndex !== -1) {
               updatedSections.splice(footerIndex, 0, newSectionObj);
             } else {
-              updatedSections.push(newSectionObj); // If footer is missing
+              updatedSections.push(newSectionObj);
             }
 
             return {
@@ -316,26 +395,22 @@ const Website = () => {
       setWebsiteData((prevData) => {
         const updatedPages = [...prevData.pages];
 
-        // Get the sections of the targeted page
         const updatedSections = [
           ...updatedPages[colIndexForAddSection].sections,
         ];
         const newSectionObj = {
-          section_type: "",
+          section_type: newSection.type,
           section_title: newSection.title,
-          section_description: "",
+          section_description: newSection.description,
         };
 
-        // Insert the new section after the given section index
         updatedSections.splice(indexOfAddSection + 1, 0, newSectionObj);
 
-        // Update the page with the new sections
         updatedPages[colIndexForAddSection] = {
           ...updatedPages[colIndexForAddSection],
           sections: updatedSections,
         };
 
-        // Return the updated website data
         return {
           ...prevData,
           pages: updatedPages,
@@ -346,15 +421,13 @@ const Website = () => {
     setIsSidebarOpen(false);
     setIsHomeAddIconClicked(false);
     setIsColAddIconClicked(false);
+    setIsSectionAddIconClicked(false);
     setColIndex(null);
     setColIndexForAddSection(null);
     setIndexOfAddSection(null);
   };
 
   const handleAddPage = () => {
-    // if(popupTitle.trim()===""){
-    //   return
-    // }
     const formattedType = popupTitle.toLowerCase().replace(" ", "_");
     const newPage = {
       page_type: formattedType,
@@ -597,6 +670,8 @@ const Website = () => {
     function handleClickOutside(event) {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
         setIsSidebarOpen(false);
+        setSidebarDescription("");
+        setSidebarTitle("");
       }
     }
 
@@ -628,6 +703,10 @@ const Website = () => {
                         editedSection.trim() === ""
                           ? section.section_title
                           : editedSection,
+                      section_description:
+                        editedDescription.trim() === ""
+                          ? section.section_description
+                          : editedDescription,
                     };
                   }
                   return section;
@@ -643,7 +722,9 @@ const Website = () => {
         });
 
         setEditedSection(null);
+        setEditedDescription(null);
         setIsTitlePopupOPen(false);
+        setSidebarDescription("");
       }
     }
 
@@ -654,7 +735,13 @@ const Website = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isTitlePopupOpen, sidebarTitle, editedSection]);
+  }, [
+    isTitlePopupOpen,
+    sidebarTitle,
+    sidebarDescription,
+    editedSection,
+    editedDescription,
+  ]);
 
   return (
     <div className="main-container">
@@ -668,8 +755,10 @@ const Website = () => {
                 className="sidebar-section-item"
                 onClick={() => {
                   setSidebarTitle(sidebarSection.title);
+                  setSidebarDescription(sidebarSection.description);
                   handleAddSection(sidebarSection, index);
                   setEditedSection(sidebarSection.title);
+                  setEditedDescription(sidebarSection.description);
                   setIsTitlePopupOPen(true);
                 }}
               >
@@ -720,7 +809,10 @@ const Website = () => {
             <label>Section Prompt</label>
             <textarea
               rows="5"
-              placeholder="description..."
+              value={editedDescription}
+              onChange={(e) => {
+                setEditedDescription(e.target.value);
+              }}
               className="textarea-field"
             ></textarea>
 
@@ -867,37 +959,44 @@ const Website = () => {
                       disabled={isDisabled}
                     >
                       <div className="section">
-                        {section.section_title}
+                        <span>{section.section_title}</span>
                         {!isDisabled && (
                           <>
                             <span
                               className="pencil-icon"
                               onClick={(e) => {
-                                e.stopPropagation();
+                                // e.stopPropagation();
                                 setSidebarTitle(section.section_title);
+                                setSidebarDescription(
+                                  section.section_description
+                                );
                                 setIsTitlePopupOPen(true);
                                 setEditedSection(section.section_title);
+                                setEditedDescription(
+                                  section.section_description
+                                );
                                 setRemoveIndex(0);
                                 setIndexOfAddSection(sectionIndex);
                               }}
                             >
                               <MdEdit size={14} />
                             </span>
-                         
                           </>
                         )}
-                        { section.section_title!=="Footer" &&  <span
-                              className="hover-plus-icon"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setIsSectionAddIconClicked(true);
-                                setIndexOfAddSection(sectionIndex);
-                                setColIndexForAddSection(0);
-                                setIsSidebarOpen(true);
-                              }}
-                            >
-                              <IoMdAdd />
-                            </span>}
+                        {section.section_title !== "Footer" && (
+                          <span
+                            className="hover-plus-icon"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsSectionAddIconClicked(true);
+                              setIndexOfAddSection(sectionIndex);
+                              setColIndexForAddSection(0);
+                              setIsSidebarOpen(true);
+                            }}
+                          >
+                            <IoMdAdd />
+                          </span>
+                        )}
                       </div>
                     </SortableItem>
                   );
@@ -931,7 +1030,7 @@ const Website = () => {
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handlePageDragEnd}
-          modifiers={[restrictToHorizontalAxis,restrictToWindowEdges]}
+          modifiers={[restrictToHorizontalAxis, restrictToWindowEdges]}
         >
           <SortableContext
             items={websiteData.pages.slice(1).map((_, index) => index)}
@@ -1056,7 +1155,7 @@ const Website = () => {
                                   // }}
                                 >
                                   <div className="section">
-                                    {section.section_title}
+                                    <span> {section.section_title}</span>
 
                                     {section.section_title !== "Header" &&
                                       section.section_title !== "Footer" && (
@@ -1076,6 +1175,12 @@ const Website = () => {
                                             setEditedSection(
                                               section.section_title
                                             );
+                                            setEditedDescription(
+                                              section.section_description
+                                            );
+                                            setSidebarDescription(
+                                              section.section_description
+                                            );
                                             setRemoveIndex(pageIndex);
                                             setIndexOfAddSection(sectionIndex);
                                           }}
@@ -1084,18 +1189,20 @@ const Website = () => {
                                         </span>
                                       )}
 
-                             { section.section_title!=="Footer" &&      <span
-                                      className="hover-plus-icon"
-                                      onClick={(e) => {
-                                        setIsSectionAddIconClicked(true);
-                                        setIndexOfAddSection(sectionIndex);
-                                        setColIndexForAddSection(pageIndex);
+                                    {section.section_title !== "Footer" && (
+                                      <span
+                                        className="hover-plus-icon"
+                                        onClick={(e) => {
+                                          setIsSectionAddIconClicked(true);
+                                          setIndexOfAddSection(sectionIndex);
+                                          setColIndexForAddSection(pageIndex);
 
-                                        setIsSidebarOpen(true);
-                                      }}
-                                    >
-                                      <IoMdAdd />
-                                    </span>}
+                                          setIsSidebarOpen(true);
+                                        }}
+                                      >
+                                        <IoMdAdd />
+                                      </span>
+                                    )}
                                   </div>
                                 </SortableItem>
                               );
