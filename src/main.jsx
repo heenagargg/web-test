@@ -2,12 +2,14 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import CardsBoard from './App.jsx'
-import { BrowserRouter } from 'react-router-dom'
+import Website from './components/Website.jsx'
+import CardsBoard from './CardsBoard.jsx'
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 createRoot(document.getElementById('root')).render(
    <BrowserRouter>
-   <App />
-   
+      <Routes>
+         <Route path="/web-test" element={<App/>}></Route>
+         <Route path="/web-test/website-building" element={<CardsBoard/>}/>
+      </Routes>
    </BrowserRouter>
-   
 )
