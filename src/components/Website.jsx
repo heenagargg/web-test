@@ -816,7 +816,7 @@ const Website = () => {
                       disabled={isDisabled}
                     >
                       <div className="section">
-                        <span>{section.section_title}</span>
+                        <span className="section-title">{section.section_title}</span>
                         {!isDisabled && (
                           <>
                             <span
@@ -1012,7 +1012,7 @@ const Website = () => {
                                   // }}
                                 >
                                   <div className="section">
-                                    <span className="section-title"> {section.section_title}</span>
+                                    <span className="section-title" > {section.section_title}</span>
 
                                     {section.section_title !== "Header" &&
                                       section.section_title !== "Footer" && (

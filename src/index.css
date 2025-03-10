@@ -219,6 +219,39 @@ textarea.input-control {
 	color: #000;
 	text-decoration: none;
 }
+ .loading-div{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	position: relative;
+} 
+
+.loading-container {
+	font-size: 18px;
+	color: #111;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  }
+  
+  .loading-message {
+	transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+	opacity: 0;
+  }
+  
+  .slide-in {
+	transform: translateY(0);
+	opacity: 1;
+  }
+  
+  .slide-out {
+	transform: translateY(20px);
+	opacity: 0;
+  }
+  
+
 
 @media screen and (min-width:1261px) {
 	.examples {
