@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Website.css";
-import {useLocation} from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import { FaHome } from "react-icons/fa";
 import { FaRegFile } from "react-icons/fa";
@@ -46,6 +46,7 @@ const Website = () => {
   const [sidebarDescription, setSidebarDescription] = useState("");
   const [isAddPagePopupOpen, setIsAddPagePopupOpen] = useState(null);
   const [popupTitle, setPopupTitle] = useState("");
+  const [sectionType,setSectionType]=useState("")
   const [removeIndex, setRemoveIndex] = useState(null);
   const [editedSection, setEditedSection] = useState("");
   const [editedDescription, setEditedDescription] = useState("");
@@ -64,6 +65,7 @@ const Website = () => {
   );
 
   const [websiteData, setWebsiteData] = useState(jsonData);
+  console.log(websiteData)
   const SidebarSections = [
     {
       type: "custom_section",
@@ -523,6 +525,7 @@ const Website = () => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
         setIsSidebarOpen(false);
         setSidebarDescription("");
+        setSectionType("")
         setSidebarTitle("");
       }
     }
@@ -577,6 +580,7 @@ const Website = () => {
         setEditedDescription(null);
         setIsTitlePopupOPen(false);
         setSidebarDescription("");
+        setSectionType("")
       }
     }
 
@@ -608,14 +612,15 @@ const Website = () => {
                 onClick={() => {
                   setSidebarTitle(sidebarSection.title);
                   setSidebarDescription(sidebarSection.description);
+                  setSectionType(sidebarSection.type)
                   handleAddSection(sidebarSection, index);
                   setEditedSection(sidebarSection.title);
                   setEditedDescription(sidebarSection.description);
                   setIsTitlePopupOPen(true);
-                  if(isHomeAddIconClicked){
-                    setRemoveIndex(0)
-                  }else{
-                    setRemoveIndex(colIndex)
+                  if (isHomeAddIconClicked) {
+                    setRemoveIndex(0);
+                  } else {
+                    setRemoveIndex(colIndex);
                   }
                 }}
               >
@@ -673,6 +678,12 @@ const Website = () => {
               className="textarea-field"
             ></textarea>
 
+            <label>Section Type</label>
+            <input
+              type="text"
+              value={sectionType}
+              className="input-field section-type"
+            />
             <button
               className="remove-btn"
               onClick={(e) => handleRemoveSection(e)}
@@ -816,7 +827,9 @@ const Website = () => {
                       disabled={isDisabled}
                     >
                       <div className="section">
-                        <span className="section-title">{section.section_title}</span>
+                        <span className="section-title">
+                          {section.section_title}
+                        </span>
                         {!isDisabled && (
                           <>
                             <span
@@ -834,6 +847,8 @@ const Website = () => {
                                 );
                                 setRemoveIndex(0);
                                 setIndexOfAddSection(sectionIndex);
+                                setSectionType(section.section_type)
+                    
                               }}
                             >
                               <MdEdit size={14} />
@@ -1012,7 +1027,10 @@ const Website = () => {
                                   // }}
                                 >
                                   <div className="section">
-                                    <span className="section-title" > {section.section_title}</span>
+                                    <span className="section-title">
+                                      {" "}
+                                      {section.section_title}
+                                    </span>
 
                                     {section.section_title !== "Header" &&
                                       section.section_title !== "Footer" && (
@@ -1040,6 +1058,7 @@ const Website = () => {
                                             );
                                             setRemoveIndex(pageIndex);
                                             setIndexOfAddSection(sectionIndex);
+                                            setSectionType(section.section_type)
                                           }}
                                         >
                                           <MdEdit size={14} />

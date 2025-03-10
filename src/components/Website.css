@@ -493,7 +493,11 @@
     opacity: 1;
     cursor: pointer;
   }
-  
+
+.section-type{
+  cursor: not-allowed;
+  opacity: 0.5;
+}
   @keyframes slideIn {
     from {
       right: -350px;
