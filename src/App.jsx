@@ -19,7 +19,7 @@ const App = () => {
                     ];
     const [prompt, setPrompt] = useState("");
     const openai = new OpenAI({ apiKey: import.meta.env.VITE_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
-    const sectionTypeEnums = z.enum(["about", "benefit", "post_grid", "contact", "call_to_action", "faq", "feature_highlight", "features_list", "social_proof", "gallery", "hero", "banner", "reviews", "testimonials", "pricing_table", "menu_listing", "informational_content_with_media", "informational_content_without_media"]);
+    const sectionTypeEnums = z.enum(["header", "footer", "banner", "hero",  "about", "benefit", "post_grid", "contact", "call_to_action", "faq", "feature_highlight", "features_list", "social_proof", "gallery", "hero", "banner", "reviews", "testimonials", "pricing_table", "menu_listing", "informational_content_with_media", "informational_content_without_media"]);
     const returnSchema = z.object({
         website_title: z.string(),
         website_description: z.string(),
@@ -49,11 +49,12 @@ const App = () => {
                     1. Create up to 5 pages for each website. Exclude any blog pages.
                     2. Propose a suitable website title and a concise website description based on the provided website idea.
                     3. Design an informational website with a contact form included on the contact page only.
-                    4. Omit header and footer sections from all pages.
-                    5. Ensure the homepage features a Hero section along with other relevant sections.
-                    6. Include a Banner section on all pages except the homepage, with the page title as the section title.
-                    7. Use slug format for both page_type and section_type.
-                    8. For "section_description": Describe what the section is about in concise and clear language. Outline the main purpose and key points the section intends to communicate.
+                    4. Include a Header as a first section on all pages with section title as "Header".
+                    5. Include a Footer as a last section on all pages with section title as "Footer".
+                    6. Ensure the homepage features a Hero section along with other relevant sections.
+                    7. Include a Banner section on all pages except the homepage, with the page title as the section title.
+                    8. Use slug format for both page_type and section_type.
+                    9. For "section_description": Describe what the section is about in concise and clear language. Outline the main purpose and key points the section intends to communicate.
                     ` 
                 },
                 { 
@@ -64,10 +65,6 @@ const App = () => {
             response_format: zodResponseFormat(returnSchema, "websiteUI"),
             });
             const returnData = completion.choices[0].message.parsed;
-            console.log( returnData );
-            let returnDiv = document.getElementById("aiReturnData");
-            returnDiv.setHTMLUnsafe( '<code class="language-html">' + JSON.stringify(returnData, undefined, 2) + '</code>' );
-            hljs.highlightBlock(returnDiv);
             navigate('/web-test/website-building', {state:{returnData}} );
         }else{
             alert("Please describe your website in a few words.");

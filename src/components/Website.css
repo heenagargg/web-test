@@ -90,17 +90,19 @@
     border-radius: 8px;
     height: max-content;
   } */
-  .section{
+  .section {
     padding: 10px;
     margin: 4px 8px;
     font-size: 12px;
     font-weight: 400;
-    border:1px solid #e5e5e5;
+    border: 1px solid #e5e5e5;
     border-radius: 4px;
     cursor: pointer;
     position: relative;
     /* border-bottom: 1px solid #e5e5e5; */
     transition: backgroun-color 0.2s;
+    display: flex;
+    align-items: center;
   }
   
 
@@ -114,7 +116,11 @@
     color: #1621d8;
   
   }
-
+  span.section-title {
+    padding-right: 40px;
+    width: 100%;
+    display: inline-block;
+  }
   .hover-plus-icon{
     position: absolute;
     left: 0px;

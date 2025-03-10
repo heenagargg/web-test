@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Website.css";
+import {useLocation} from 'react-router-dom';
 import { FaPlus } from "react-icons/fa";
 import { FaHome } from "react-icons/fa";
 import { FaRegFile } from "react-icons/fa";
@@ -30,11 +31,9 @@ import {
 } from "@dnd-kit/modifiers";
 import SortableItem from "./SortableItem";
 import SortablePageItem from "./SortablePageItem";
-import { useLocation } from "react-router";
 const Website = () => {
-  // const location = useLocation();
-  // const jsonData = location.state ?? {};
-  // console.log("jsonData",jsonData)
+  const location = useLocation();
+  const jsonData = location.state.returnData ?? {};
   const [isSidebarOpen, setIsSidebarOpen] = useState(null);
   const [isHomeAddIconClicked, setIsHomeAddIconClicked] = useState(null);
   const [isColAddIconClicked, setIsColAddIconClicked] = useState(null);
@@ -64,154 +63,7 @@ const Website = () => {
     })
   );
 
-  const [websiteData, setWebsiteData] = useState({
-    website_title: "John Doe's Portfolio",
-    website_description:
-      "Showcasing 7+ years of expertise in web design, John Doe's Portfolio highlights innovative designs and successful projects, while providing insights into the crafting of user-friendly and engaging web experiences.",
-    pages: [
-      {
-        page_type: "home",
-        page_title: "Home",
-        page_description:
-          "Welcome to my portfolio, where creativity meets functionality in web design.",
-        sections: [
-          {
-            section_type: "header",
-            section_title: "Header",
-            section_description: "",
-          },
-          {
-            section_type: "hero",
-            section_title: "Hero",
-            section_description:
-              "Explore my journey as a web designer with over 7 years of experience.",
-          },
-          {
-            section_type: "about_us",
-            section_title: "About Us",
-            section_description:
-              "I'm a passionate web designer dedicated to producing stunning and effective websites.",
-          },
-          {
-            section_type: "services",
-            section_title: "Services",
-            section_description: "Services I offer to my clients.",
-          },
-          {
-            section_type: "contact_us",
-            section_title: "Contact Us",
-            section_description:
-              "Get in touch for collaborations or inquiries.",
-          },
-          {
-            section_type: "footer",
-            section_title: "Footer",
-            section_description: "",
-          },
-        ],
-      },
-      {
-        page_type: "about",
-        page_title: "About Us",
-        page_description:
-          "Learn more about my background and design philosophy.",
-        sections: [
-          {
-            section_type: "header",
-            section_title: "Header",
-            section_description: "",
-          },
-          {
-            section_type: "about_company",
-            section_title: "About DigiElevate",
-            section_description: "Learn about our company and values.",
-          },
-          {
-            section_type: "footer",
-            section_title: "Footer",
-            section_description: "",
-          },
-        ],
-      },
-      {
-        page_type: "services",
-        page_title: "Services",
-        page_description: "Explore the range of services I offer.",
-        sections: [
-          {
-            section_type: "header",
-            section_title: "Header",
-            section_description: "",
-          },
-          {
-            section_type: "digital_marketing",
-            section_title: "Digital Marketing Services",
-            section_description:
-              "Our comprehensive digital marketing solutions.",
-          },
-          {
-            section_type: "footer",
-            section_title: "Footer",
-            section_description: "",
-          },
-        ],
-      },
-      {
-        page_type: "contact",
-        page_title: "Contact",
-        page_description: "Get in touch for collaborations or inquiries.",
-        sections: [
-          {
-            section_type: "header",
-            section_title: "Header",
-            section_description: "",
-          },
-          {
-            section_type: "contact_form",
-            section_title: "Contact DigiElevate",
-            section_description: "Fill in the form below to reach out.",
-          },
-          {
-            section_type: "footer",
-            section_title: "Footer",
-            section_description: "",
-          },
-        ],
-      },
-      {
-        page_type: "blog",
-        page_title: "Blog",
-        page_description: "Read our latest articles and insights.",
-        sections: [
-          {
-            section_type: "header",
-            section_title: "Header",
-            section_description: "",
-          },
-          {
-            section_type: "blog_content",
-            section_title: "DigiElevate Blog",
-            section_description: "Latest articles and insights.",
-          },
-          {
-            section_type: "recent_posts",
-            section_title: "Recent Blog Posts",
-            section_description: "Check out our newest content.",
-          },
-          {
-            section_type: "newsletter",
-            section_title: "Related Content/Newsletter Signup",
-            section_description: "Subscribe to our newsletter.",
-          },
-          {
-            section_type: "footer",
-            section_title: "Footer",
-            section_description: "",
-          },
-        ],
-      },
-    ],
-  });
+  const [websiteData, setWebsiteData] = useState(jsonData);
   const SidebarSections = [
     {
       type: "custom_section",
@@ -1160,7 +1012,7 @@ const Website = () => {
                                   // }}
                                 >
                                   <div className="section">
-                                    <span> {section.section_title}</span>
+                                    <span className="section-title"> {section.section_title}</span>
 
                                     {section.section_title !== "Header" &&
                                       section.section_title !== "Footer" && (
