@@ -69,7 +69,7 @@ const App = () => {
             });
            
             const returnData = completion.choices[0].message.parsed;
-            navigate('/web-test/website-building', {state:{returnData}} );
+            navigate('/website-builder/site-structure', {state:{returnData}} );
             setIsLoading(false)
           
         }else{

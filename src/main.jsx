@@ -8,8 +8,8 @@ import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 createRoot(document.getElementById('root')).render(
    <BrowserRouter>
       <Routes>
-         <Route path="/web-test" element={<App/>}></Route>
-         <Route path="/web-test/website-building" element={<Website/>}/>
+         <Route path="/website-builder" element={<App/>}></Route>
+         <Route path="/website-builder/site-structure" element={<Website/>}/>
       </Routes>
    </BrowserRouter>
 )
