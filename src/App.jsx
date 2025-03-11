@@ -69,7 +69,7 @@ const App = () => {
             });
            
             const returnData = completion.choices[0].message.parsed;
-            navigate('/website-builder/site-structure', {state:{returnData}} );
+            navigate('/site-structure', {state:{returnData}} );
             setIsLoading(false)
           
         }else{
@@ -88,10 +88,10 @@ const App = () => {
     isLoading?
     <div className="loading-div">
         <img className="form-img" src="./bloxby.svg" alt="Bloxby" width={200} />
-        <img src={logoGif} alt="loading..." height='100px' />
+        <img src={logoGif} alt="loading..." height='100px' style={{marginTop:'-24px',marginBottom:'10px'}} />
         <TextAnimation/>
     </div>:
-     <div className="main-container">
+     <div className="main-container-1">
      <div className="form-container">
          <img className="form-img" src="./bloxby.svg" alt="Bloxby" width={200} />
          <h1 className="form-heading">What can I help you with?</h1>
@@ -133,7 +133,7 @@ const App = () => {
      <div className="footer-block">
          <div className="container">
              {/* <div className="footcol copyright">@copyright { new Date().getFullYear() }. All rights reserved</div> */}
-             <div className="footcol product-by">A product by <a href="https://42works.net/" target="_blank"><img src="./42-logo.svg"/> Works</a></div>
+             <div className="footcol product-by">Powered by <a href="https://42works.net/" target="_blank"><img src="./42-logo.svg"/> Works</a></div>
          </div>
      </div>
  </div>
