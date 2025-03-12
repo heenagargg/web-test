@@ -44,11 +44,9 @@ const Website = () => {
   const [colIndexForAddSection, setColIndexForAddSection] = useState(null);
   const [colIndex, setColIndex] = useState(null);
   const [isTitlePopupOpen, setIsTitlePopupOPen] = useState(null);
-  const [isTitlePopupClosing, setIsTitlePopupClosing] = useState(false);
   const [sidebarTitle, setSidebarTitle] = useState("");
   const [sidebarDescription, setSidebarDescription] = useState("");
   const [isAddPagePopupOpen, setIsAddPagePopupOpen] = useState(null);
-  const [isAddPagePopupClosing, setIsAddPagePopupClosing] = useState(false);
   const [popupTitle, setPopupTitle] = useState("");
   const [sectionType, setSectionType] = useState("");
   const [removeIndex, setRemoveIndex] = useState(null);
@@ -450,11 +448,7 @@ const Website = () => {
   useEffect(() => {
     function handleClickOutside(event) {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
-        setIsAddPagePopupClosing(true);
-        setTimeout(() => {
-          setIsAddPagePopupClosing(false);
-          setIsAddPagePopupOpen(false);
-        }, 500);
+        setIsAddPagePopupOpen(false);
         setPopupTitle("");
       }
     }
@@ -528,11 +522,7 @@ const Website = () => {
         setEditedDescription(null);
         setSidebarDescription("");
         setSectionType("");
-        setIsTitlePopupClosing(true);
-        setTimeout(() => {
-          setIsTitlePopupClosing(false);
-          setIsTitlePopupOPen(false);
-        }, 500);
+        setIsTitlePopupOPen(false);
       }
     }
 
@@ -619,9 +609,7 @@ const Website = () => {
       )}
       {isTitlePopupOpen && (
         <div
-          className={`side-drawer ${isTitlePopupOpen ? "open" : ""} ${
-            isTitlePopupClosing ? "title-popup-closing" : ""
-          }`}
+          className={`side-drawer ${isTitlePopupOpen ? "open" : ""}`}
           ref={titlePopupRef}
         >
           <div className="side-drawer-header">
@@ -676,9 +664,7 @@ const Website = () => {
 
       {isAddPagePopupOpen && (
         <div
-          className={`popup-container ${
-            isAddPagePopupClosing ? "add-page-closing" : ""
-          }`}
+          className={`popup-container `}
           ref={popupRef}
         >
           <div className="popup-content">
