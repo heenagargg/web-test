@@ -177,8 +177,7 @@ textarea.input-control {
 
 .footer-block {
 	padding: 15px 0;
-	/* background: #eee; */
-	position: absolute;
+	position: fixed;
 	width: 100%;
 	bottom: 0;
 	left: 0;
