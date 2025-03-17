@@ -63,13 +63,13 @@ const DescriptionSidebar = ({
             <div className="site-brief-info-item">
               <div className="site-label">Website type</div>
               <div className="brief-info-value-div">
-                <div className="brief-info-value">Website Type</div>
+                <div className="brief-info-value">{websiteData.website_type}</div>
               </div>
             </div>
             <div className="site-brief-info-item">
               <div className="site-label">Industry</div>
               <div className="brief-info-value-div">
-                <div className="brief-info-value">Industry</div>
+                <div className="brief-info-value">{websiteData.website_industry}</div>
               </div>
             </div>
             <div className="site-brief-info-item">
