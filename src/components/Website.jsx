@@ -991,8 +991,10 @@ const Website = () => {
           <div className="footcol product-by">
             Powered by{" "}
             <a href="https://42works.net/" target="_blank">
-              <img src="./42-logo.svg" /> Works
+              {/* <img src="./42-logo.svg" /> Works */}
+              <img src="../../svg-image-1.svg" alt="42 Works" />
             </a>
+            .{" "}All Rights Reserved.
           </div>
         </div>
       </div>
