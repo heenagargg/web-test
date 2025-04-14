@@ -1,0 +1,45 @@
+.template-main-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+.template-div-container{
+    position: fixed;
+    left: 0px;
+    width: 70%;
+    border: 1px solid;
+    height: 100vh;
+    padding: 29px 50px 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+}
+.template-div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* border: 1px solid; */
+}
+.template-design-div{
+    background: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    width: 670px;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+.template-sidebar-div{
+    position: fixed;
+    right: 0px;
+    width: 30%;
+    border: 1px solid;
+    height: 100vh;
+    background-color: #fff;
+    padding: 40px 30px 70px;
+    min-width: 340px;
+    max-width: 340px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

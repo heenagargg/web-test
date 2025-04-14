@@ -88,105 +88,6 @@ const App = () => {
 
 
   return (
-<<<<<<< HEAD
-    <>
-      {isLoading ? (
-        <div className="loading-div">
-          <img
-            className="form-img"
-            src="./bloxby.svg"
-            alt="Bloxby"
-            width={200}
-          />
-          <img
-            src={logoGif}
-            alt="loading..."
-            height="100px"
-            style={{ marginTop: "-24px", marginBottom: "10px" }}
-          />
-          <TextAnimation />
-        </div>
-      ) : (
-        <div className="main-container-1">
-          <div className="form-container">
-            <img
-              className="form-img"
-              src="./bloxby.svg"
-              alt="Bloxby"
-              width={200}
-            />
-            <h1 className="form-heading">What can I help you with?</h1>
-            <form action="" id="userPromptForm" onSubmit={handlePromptSubmit}>
-              <div className="form-control">
-                <textarea
-                  placeholder="Provide your website name and describe it in a few words."
-                  className="input-control"
-                  name="user_prompt"
-                  id="userPromptInput"
-                  onChange={(e) => setPrompt(e.target.value)}
-                  value={prompt}
-                ></textarea>
-              </div>
-              <div className="form-control">
-                <button className="submit-control btn-custom" type="submit">
-                  Generate Your Website
-                </button>
-              </div>
-            </form>
-            <div className="examples">
-              <div className="examples-container">
-                <div className="examples_items">
-                  <div className="items">
-                    {examplesTexts.map((element, i) => {
-                      return (
-                        <div className="example" key={"example" + i}>
-                          <span
-                            className="text"
-                            onClick={() => {
-                              setPrompt(element);
-                            }}
-                          >
-                            {element}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-                <div className="examples_items">
-                  <div className="items">
-                    {examplesTexts.map((element, i) => {
-                      return (
-                        <div
-                          className="example"
-                          key={"example" + (examplesTexts.length + i)}
-                        >
-                          <span className="text">{element}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="footer-block">
-            <div className="container">
-              {/* <div className="footcol copyright">@copyright { new Date().getFullYear() }. All rights reserved</div> */}
-              <div className="footcol product-by">
-                Powered by{" "}
-                <a href="https://42works.net/" target="_blank">
-                  {/* <img src="./42-logo.svg" /> Works */}
-                  <img src="../svg-image-1.svg" alt="42 Works" />
-                </a>
-                .{" "}All Rights Reserved.
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
-=======
    <>
    {
     isLoading?
@@ -243,7 +144,6 @@ const App = () => {
  </div>
    }
    </>
->>>>>>> 12249b3d845dc383b9c6122027dfe194e432c6ce
   );
 };
 
