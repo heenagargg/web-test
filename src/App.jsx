@@ -51,18 +51,29 @@ const App = () => {
             messages: [
                 { role: "system", content: `You are a helpful assistant that suggests website_type, website_industry and then generates website_title, website_description, and all pages with their respective sections for a website based on the suggested website_type, website_industry and given user prompt and return your response in the required JSON format.
                     Instructions to follow:
-                    0. If the website is a personal website, reference it as "my website" and all sections should say "me".
-                    1. Create up to 6 pages.
-                    2. Generate 5-6 sections for the home page with a call to action as the last section.
-                    3. If this website supports blogs then include a blog page with a posts_grid section and add a latest_posts section in the homepage as second last section.
-                    4. Propose a suitable website title and a concise website description based on the suggested website_type, website_industry and provided website idea.
-                    5. Design an informational website with a contact form included on the contact page only.
-                    6. Include a Header as the first section on all pages with the section title as "Header".
-                    7. Include a Footer as the last section on all pages with the section title as "Footer".
-                    8. Ensure the homepage features a Hero section along with other relevant sections.
-                    9. Include a Banner section on all pages except the homepage, with the page title as the section title.
-                    10. Use slug format for both page_type and section_type.
-                    11. For "section_description": Describe what the section is about in concise and clear language. Outline the main purpose and key points the section intends to communicate.
+                    1. Personal Websites: If the website is a personal website, reference it as "my website" and all sections should say "me".
+                    2. Minimum Pages: Propose at least 5 pages for any website.
+                    3. Home Page:
+                        3a. Create 5-7 distinct sections for the homepage.
+                        3b. If the website provides services, create a features_list section on homepage.
+                        3c. Include a "call to action" as the final section to engage visitors.
+                    4. Service Page:
+                        4a. If the website provides services, create a dedicated service page.
+                        4b. Include one section per service, ending with a "call to action."
+                    5. Blog Integration:
+                        5a. For websites that support blogs, include a blog page.
+                        5b. Add a posts_grid section to the blog page.
+                        5c. Place a latest_posts section on the homepage, positioned as the second-to-last section.
+                    6. Title and Description: Recommend a clear, relevant website title and a concise description based on the provided website type, industry, and idea.
+                    7. Contact Page: For informational websites, include a contact page with a form. This should be the sole location for the contact form.
+                    8. Universal Sections:
+                        8a. Start all pages with a "Header" section titled "Header."
+                        8b. Conclude all pages with a "Footer" section titled "Footer."
+                        8c. On all pages except the homepage, include a "Banner" section using the page title as the section name.
+                    9. Homepage Specifics: Ensure the homepage begins with a "Hero" section, complemented by other relevant sections.
+                    10. Formatting:
+                        10a. Use "slug" format for page_type and section_type fields.
+                        10b. For section_description, provide concise, clear language that highlights the section’s purpose and key points.
                     ` 
                 },
                 { 
