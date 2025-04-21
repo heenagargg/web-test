@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Website.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import { FaHome } from "react-icons/fa";
 import { FaRegFile } from "react-icons/fa";
@@ -36,6 +36,7 @@ import DescriptionSidebar from "./DescriptionSidebar";
 const Website = () => {
   const location = useLocation();
   const jsonData = location.state.returnData ?? {};
+  const navigate=useNavigate()
   const [isSidebarOpen, setIsSidebarOpen] = useState(null);
   const [isHomeAddIconClicked, setIsHomeAddIconClicked] = useState(null);
   const [isColAddIconClicked, setIsColAddIconClicked] = useState(null);
@@ -986,9 +987,22 @@ const Website = () => {
           </SortableContext>
         </DndContext>
       </div>
-      <div className="footer-block">
+      {/* <div className="footer-block">
         <div className="container">
           <div className="footcol product-by">
+            Powered by{" "}
+            <a href="https://42works.net/" target="_blank">
+   
+              <img src="../../svg-image-1.svg" alt="42 Works" />
+            </a>
+            .{" "}All Rights Reserved.
+          </div>
+        </div>
+      </div> */}
+
+
+      <div className="db-actions-line ng-star-inserted active">
+      <div className="footcol product-by">
             Powered by{" "}
             <a href="https://42works.net/" target="_blank">
               {/* <img src="./42-logo.svg" /> Works */}
@@ -996,8 +1010,28 @@ const Website = () => {
             </a>
             .{" "}All Rights Reserved.
           </div>
-        </div>
+        <ul className="db-steps item 4">
+          <li className="active ng-star-inserted">
+            <span>SITE INFO</span>
+          </li>
+          <li className="active ng-star-inserted">
+            <span>PAGES</span>
+          </li>
+          <li className="ng-star-inserted color-font-step active">
+            <span style={{color:"#ccc"}}>COLORS &amp; FONTS</span>
+          </li>
+        </ul>
+    
+       <a className="ds-btn-m ds-btn-outline item"  onClick={()=>{
+            navigate('/color-template', {state:{jsonData}} )
+           
+            }} >
+          <span>Next</span>
+        </a>
+       
+      
       </div>
+
     </div>
   );
 };
