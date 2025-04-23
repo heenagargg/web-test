@@ -9,7 +9,6 @@ const colorThief = new ColorThief();
 const ColorTemplatePage = () => {
   const imgRef = useRef();
   const [theme, setTheme] = useState("material");
-  const [logoURL, setLogoURL] = useState("");
   const [colors, setColors] = useState([
     [[26, 188, 156], [108, 117, 125]],
     [[40, 53, 102], [152, 100, 36]],
@@ -52,7 +51,6 @@ const ColorTemplatePage = () => {
   }
 
   const getColors = () => {
-    // Make sure image is loaded
     if (imgRef.current.complete) {
       var colorPallete = colorThief.getPalette(imgRef.current, 2)
       colors.push(colorPallete)
@@ -185,7 +183,6 @@ const ColorTemplatePage = () => {
             <span className="title-small mb6">Colors</span>
             <div className="db-list">
               {colors.map((color) => {
-                console.log(color);
                 return <div
                   onClick={() => setActiveColor(color)}
                   className={`AI color-item suggested ${color === activeColor ? "selected" : ""
