@@ -6,72 +6,26 @@
 	padding: 0;
 	box-sizing: border-box;
 }
-.cyan-grey{
-	--accentColor: rgb(26, 188, 156);
-	--secondaryColor: rgb(108, 117, 125);
+.website-customizer-box{
 	--accentColorShade: #5833f10a;
 	--accentColorShade2: #5833f11a;
 }
-.blue-brown{
-	--accentColor: rgb(40, 53, 102);
-	--secondaryColor:rgb(152, 100, 36);
-	--accentColorShade: #5833f10a;
-	--accentColorShade2: #5833f11a;
-}
-.blue-grey{
-	--accentColor:rgb(58, 91, 204);
-	--secondaryColor:rgb(137, 137, 137);
-	--accentColorShade: #5833f10a;
-	--accentColorShade2: #5833f11a;
-}
-.pink-grey{
-	--accentColor:rgb(227, 54, 101);
-	--secondaryColor:rgb(137, 137, 137);
-	--accentColorShade: #5833f10a;
-	--accentColorShade2: #5833f11a;
-}
-.green-parrot{
-	--accentColor:rgb(90, 94, 50);
-	--secondaryColor:rgb(219, 199, 91);
-	--accentColorShade: #5833f10a;
-	--accentColorShade2: #5833f11a;
-}
-.red-pink{
-	--accentColor:rgb(95, 25, 40);
-	--secondaryColor:rgb(222, 135, 194);
-	--accentColorShade: #5833f10a;
-	--accentColorShade2: #5833f11a;
-}
-.darkblue-grey{
-	--accentColor:rgb(88, 51, 241);
-	--secondaryColor:rgb(137, 137, 137);
-	--accentColorShade: #5833f10a;
-	--accentColorShade2: #5833f11a;
-}
-.purple-yellow{
-	--accentColor:rgb(130, 31, 160);
-	--secondaryColor:rgb(244, 199, 48);
-	--accentColorShade: #5833f10a;
-	--accentColorShade2: #5833f11a;
-}
-.brown-green{
-	--accentColor:rgb(141, 109, 54);
-	--secondaryColor:rgb(158, 189, 89);
-	--accentColorShade: #5833f10a;
-	--accentColorShade2: #5833f11a;
-}
-.orange-grey{
-	--accentColor:rgb(237, 103, 68);
-	--secondaryColor:rgb(137, 137, 137);
-	--accentColorShade: #5833f10a;
-	--accentColorShade2: #5833f11a;
+.site-logo-main {
+	width: fit-content;
+	height: 100%;
+	color: var(--accentColor);
+	margin-bottom: 20px;
+	line-height: 50px;
+	max-height: 50px;
 }
 
 body {
 	min-height: 100vh;
-	background: #f5f5f7;
+	background-color: #f5f5f7;
 	font-family: "Roboto", serif;
 	background-image: url(/body-bg.png);
+	background-repeat: no-repeat;
+	background-size: cover;
 }
 .classic-font{
 	--mainFontFamily: Georgia, 'Times New Roman', Times, serif;
